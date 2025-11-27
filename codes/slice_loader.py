@@ -2,8 +2,7 @@ import torch
 import os
 from torch.utils.data import Dataset, DataLoader
 import glob
-from utils import create_patches, create_patches_list
-from read_write_mrc import read_mrc, write_mrc
+from codes/read_write_mrc import read_mrc, write_mrc
 import cupy as np
 import gc
 
