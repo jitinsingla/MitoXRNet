@@ -1,6 +1,6 @@
 import numpy as np
 import skimage
-from read_write_mrc import read_mrc, write_mrc
+from codes/read_write_mrc import read_mrc, write_mrc
 from patchify import patchify, unpatchify
 import os
 from scipy import ndimage
