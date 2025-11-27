@@ -6,13 +6,11 @@
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-1. Make sure your files are in .mrc format
+1. Make sure your files are in .mrc format and inside Data/User
 
 2. Use "Preprocessing.ipynb" to generate preprocessed image
 
-3. Seperate preprocessed cells into 6 folders trainMrc, testMrc, valMrc, trainMask, testMask, valMask.
-
-4. Create Slices for training, validation and test cells using "create_slices.ipynb"
+3. Create Slices for training, validation and test cells using "create_slices.ipynb"
 
 5. Start the training using "Train.ipynb" , this will save best model, log files of training along with live tensorboard info.: You can use U-Net or U-NetDeep defined in 'pytorch_network.py' and other        Loss functions.
 
