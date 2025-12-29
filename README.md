@@ -13,9 +13,9 @@ For directlyu predicting using the pretrained mdoels, skip trining instrcutiuons
 
 ## Training from Scratch
 #### Data preparation:
-Data/TrainingData
+Data/Training
 Data in this folder is used for traingin the model from mstratch. The data in this flder will besplit into trining, val and test in x, y, z %
-1. To prepare the data for training copy raw mrc files in Data/TraningData/MRCs and ground truth labels in Data/TraningData/Labels
+1. To prepare the data for training copy raw mrc files in Data/Traning/MRCs and ground truth labels in Data/Traning/Labels
 Notes about data preparatiion:
 MitoRNet requires that idivudal cell is masked in raw MRC files (like using ACSeg (link)
 size example (mrc==label)
@@ -26,10 +26,10 @@ make sure both raw MRCs and Labels are in .mrc format
 
 Steps:
 #### Preprocessing: 
-Here all the raw mrcs and masks are split in train, test and val folders inside Data/TrainingData folder.
+Here all the raw mrcs and masks are split in train and val folders inside Data/Training folder (i.e. mrc_train, mrc_val, mask_train and mask_val)
 Each mrc and mask undergoes padding, to ensure the image size mat hes model requirement.
 Each raw mrc undergoes preprocessing as proposed in MitoXRNet paper.
-Further it creates 3D slices for all the train, test and val dataset.
+Further it creates 3D slices for train and val dataset in folder Data/Training/slices.
 
 run:
 python codes/preprocessing.py
