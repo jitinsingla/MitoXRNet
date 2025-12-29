@@ -4,6 +4,7 @@ from read_write_mrc import read_mrc, write_mrc
 from patchify import patchify, unpatchify
 from scipy import ndimage
 
+#----------Preprocessing----------
 def normalisation(img):
     norm_img = (img-img.min())/(img.max()-img.min())
     return norm_img
@@ -19,19 +20,36 @@ def anti_padding(img, target_size):
 
     crop_slices = [slice((img.shape[i] - target_size[i]) // 2, (img.shape[i] - target_size[i]) // 2 + target_size[i]) for i in range(3)]
     cropped_img = img[crop_slices[0], crop_slices[1], crop_slices[2]]
-    
     return cropped_img
 
 def mask_crop(image, labels):
     cropped_mrc = np.where(labels>0, image, 0)
     return cropped_mrc
 
+def hpf_sobel(image):
+    gradient_x = ndimage.sobel(image, axis=1, mode='constant')
+    gradient_y = ndimage.sobel(image, axis=0, mode='constant')
+    gradient_z = ndimage.sobel(image, axis=2, mode='constant')
+    # Combine the gradients to get the magnitude of the gradient
+    sobel_magnitude = np.sqrt(gradient_x**2 + gradient_y**2 + gradient_z**2)
+    return sobel_magnitude
+
+def ves_mito_separator(img,sigma=2):
+    out = img + ndimage.gaussian_filter(img, sigma)
+    hpf_out = hpf_sobel(out)
+    out = img + 0.75*hpf_out + 0.25*hpf_out*hpf_out
+    out = normalisation(out)*normalisation(img)
+    out = normalisation(out)
+    return out
+
+#----------Visualization----------
 def epoch_time(start_time, end_time):
     elapsed_time = end_time - start_time
     elapsed_mins = int(elapsed_time / 60)
     elapsed_secs = int(elapsed_time - (elapsed_mins * 60))
     return elapsed_mins, elapsed_secs
 
+#----------Slicing----------
 def create_and_save_slices(img, img_name, output_folder):
     patches_z = patchify(img, (64,704,704), step=(32,32,32))
     patches_z = patches_z.squeeze((1,2))
@@ -50,7 +68,8 @@ def create_and_save_slices(img, img_name, output_folder):
             patch_path = os.path.join(output_folder, patch_filename)
             write_mrc(patch_path, patch)
     print(f'Slices created for {img_name} at {output_folder}')
-         
+
+#----------Data Splitting----------
 def split_dataset(mrc_folder, mask_folder, output_folder, split_ratio=(0.8, 0.1, 0.1), seed=42):
     random.seed(seed)
     mrc_files = sorted([f for f in os.listdir(mrc_folder) if os.path.isfile(os.path.join(mrc_folder, f))])
@@ -82,7 +101,8 @@ def split_dataset(mrc_folder, mask_folder, output_folder, split_ratio=(0.8, 0.1,
     print(f"Original source folders deleted: {mrc_folder}, {mask_folder}")
     print(f"Dataset split completed. Output folder: {output_folder}")
     print(f"Train: {train_end}, Test: {test_end - train_end}, Val: {total - test_end}")
-    
+
+#----------Evaluation Metrics----------
 def IOU_and_DICE(prediction , Ground_Truth):
     intersection = np.logical_and(prediction,Ground_Truth)
     union = np.logical_or(prediction,Ground_Truth)
@@ -98,20 +118,3 @@ def Precision_recall_f1_score(prediction, Ground_Truth):
     recall = true_positive / (true_positive + false_negative)
     f1_score = 2 * (precision * recall) / (precision + recall)
     return precision, recall, f1_score 
-                
-
-def hpf_sobel(image):
-    gradient_x = ndimage.sobel(image, axis=1, mode='constant')
-    gradient_y = ndimage.sobel(image, axis=0, mode='constant')
-    gradient_z = ndimage.sobel(image, axis=2, mode='constant')
-    # Combine the gradients to get the magnitude of the gradient
-    sobel_magnitude = np.sqrt(gradient_x**2 + gradient_y**2 + gradient_z**2)
-    return sobel_magnitude
-
-def ves_mito_separator(img,sigma=2):
-    out = img + ndimage.gaussian_filter(img, sigma)
-    hpf_out = hpf_sobel(out)
-    out = img + 0.75*hpf_out + 0.25*hpf_out*hpf_out
-    out = normalisation(out)*normalisation(img)
-    out = normalisation(out)
-    return out
