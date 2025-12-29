@@ -52,34 +52,26 @@ def create_and_save_slices(img, img_name, output_folder):
     print(f'Slices created for {img_name} at {output_folder}')
          
 def split_dataset(mrc_folder, mask_folder, output_folder, split_ratio=(0.8, 0.1, 0.1), seed=42):
-   
     random.seed(seed)
-    
     mrc_files = sorted([f for f in os.listdir(mrc_folder) if os.path.isfile(os.path.join(mrc_folder, f))])
     mask_files = sorted([f for f in os.listdir(mask_folder) if os.path.isfile(os.path.join(mask_folder, f))])
-
     assert len(mrc_files) == len(mask_files), "Number of MRC files and mask files must be the same!"
-    
     combined = list(zip(mrc_files, mask_files))
     random.shuffle(combined)
     mrc_files, mask_files = zip(*combined)
-
     total = len(mrc_files)
     train_end = int(total * split_ratio[0])
     test_end = train_end + int(total * split_ratio[1])
-
     splits = {
         "train": (0, train_end),
         "test": (train_end, test_end),
         "val": (test_end, total)
     }
-
     for split_name, (start, end) in splits.items():
         mrc_out = os.path.join(output_folder, f"mrc_{split_name}")
         mask_out = os.path.join(output_folder, f"mask_{split_name}")
         os.makedirs(mrc_out, exist_ok=True)
         os.makedirs(mask_out, exist_ok=True)
-
         for mrc_file, mask_file in zip(mrc_files[start:end], mask_files[start:end]):
             shutil.copy2(os.path.join(mrc_folder, mrc_file), os.path.join(mrc_out, mrc_file))
             shutil.copy2(os.path.join(mask_folder, mask_file), os.path.join(mask_out, mask_file))
@@ -96,23 +88,15 @@ def IOU_and_DICE(prediction , Ground_Truth):
     union = np.logical_or(prediction,Ground_Truth)
     IOU = np.sum(intersection)/np.sum(union)
     DICE =  (2.0 * np.sum(intersection)) / (np.sum(prediction) + np.sum(Ground_Truth))
-    return IOU , DICE
-             
+    return IOU , DICE  
              
 def Precision_recall_f1_score(prediction, Ground_Truth):
-
     true_positive = np.sum(np.logical_and(prediction, Ground_Truth))
-    
     false_positive = np.sum(np.logical_and(prediction, np.logical_not(Ground_Truth)))
-    
     false_negative = np.sum(np.logical_and(np.logical_not(prediction), Ground_Truth))
-    
     precision = true_positive / (true_positive + false_positive)
-    
     recall = true_positive / (true_positive + false_negative)
-    
     f1_score = 2 * (precision * recall) / (precision + recall)
-    
     return precision, recall, f1_score 
                 
 
@@ -122,7 +106,6 @@ def hpf_sobel(image):
     gradient_z = ndimage.sobel(image, axis=2, mode='constant')
     # Combine the gradients to get the magnitude of the gradient
     sobel_magnitude = np.sqrt(gradient_x**2 + gradient_y**2 + gradient_z**2)
-
     return sobel_magnitude
 
 def ves_mito_separator(img,sigma=2):
