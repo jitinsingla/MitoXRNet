@@ -35,23 +35,11 @@ run:
 python codes/preprocessing.py
 
 #### Training:
-python codes/train.py
-training execution will create logs and trained model weights in the "output" folder
+python codes/train.py --modelSize 0 (small), 1 (large UNetDeep)
+training execution will create logs and trained model weights in the output/trainingWeights folder
 Early stopping has been intentially removed, so stop the training based on val and train error/accuracy
 
-#### Testing:
-python codes/test.py
-test.py predicts on the test slices and merge them in single cell predicted labels.
-The test prediction labels are saved in output/testPredictions
-
-Start the training using "Train.ipynb" , this will save best model, log files of training along with live tensorboard info.: You can use U-Net or U-NetDeep defined in 'pytorch_network.py' and other Loss functions.
-7. Then do predictions on test cell slices using "Test.ipynb" to get Mito, Nucleus Predictions.
-8. Merge the predicted slcies using "MergeSlices.ipynb" this will give two seperate folders for Merged Nucleus and Merged Mitochondria Cell predictions.
-9. Now merge the Neucleus and Mitochondria into whole cell predictions using thresholding code in "Test.ipynb".
-10. Can evaluate predictions scores like IOU, DICE, Precision, Recall, F1-score using functions defined in "utils.py" 
-
-
-## Directly Predict using MitoXRNet (Trained models from paper)
+## Predict
 #### Data preparation:
 Keep the raw mrcs for prediction in Data/PredictionData folder
 Notes about data preparatiion:
@@ -68,3 +56,9 @@ codes/predict.py --pretrained 1 (small) 2 (large) 0 (user trained)
 5. Merge slices
 
 Final prdicted labels are saved in output/
+
+
+
+
+10. Can evaluate predictions scores like IOU, DICE, Precision, Recall, F1-score using functions defined in "utils.py" 
+
