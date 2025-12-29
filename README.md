@@ -14,7 +14,7 @@ For directlyu predicting using the pretrained mdoels, skip trining instrcutiuons
 ## Training from Scratch
 #### Data preparation:
 Data/Training
-Data in this folder is used for traingin the model from mstratch. The data in this flder will besplit into trining, val and test in x, y, z %
+Data in this folder is used for traingin the model from mstratch. The data in this flder will besplit into trining and val in x, y %
 1. To prepare the data for training copy raw mrc files in Data/Traning/MRCs and ground truth labels in Data/Traning/Labels
 Notes about data preparatiion:
 MitoRNet requires that idivudal cell is masked in raw MRC files (like using ACSeg (link)
@@ -41,24 +41,29 @@ Early stopping has been intentially removed, so stop the training based on val a
 
 ## Predict
 #### Data preparation:
-Keep the raw mrcs for prediction in Data/PredictionData folder
-Notes about data preparatiion:
+Keep the raw mrcs for prediction in Data/Prediction/MRCs folder
+Notes:
 MitoRNet requires that idivudal cell is masked in raw MRC files (like using ACSeg (link)
 Each 3D Image shape along any axis should be <=704.
 make sure raw MRCs are in .mrc format
 
 #### Prediction
 codes/predict.py --pretrained 1 (small) 2 (large) 0 (user trained)
-1. Preprocessing
-2. Slicing
+0: If user tained the model and weights have been saved in output/trainingWeights folder
+1/2: For pretrained model weights reported in paper, 1 for smaller network (1.4 Million paramters) and 2 for ....
+The predict.py code performs the folloing steps:
+1. Preprocessing (sved in output/Prediction/mrc_predict_preprocessed)
+2. Slicing (output/Prediction/mrc_predict_slices)
 3. Model load
-4. Predict on each slice
+4. Predict on each slice (output/Prediction/predictedLabels_Slice_temp)
 5. Merge slices
 
-Final prdicted labels are saved in output/
+Final prdicted labels are saved in **output/Prediction/predictedLabels** (give anti-padded sizes)
 
 
-
-
-10. Can evaluate predictions scores like IOU, DICE, Precision, Recall, F1-score using functions defined in "utils.py" 
+#### Evaluation
+User can evaluate the predicted labels against the user provided labels.
+keep the user provided labels in Data/Prediction/Labels (make sure the raw mrcs and labels follow critetria as metioned under Notes in data preparation of training from scratch setion)
+run codes/evaluate.py
+Code will evaluate predictions scores like IOU, DICE, Precision, Recall, F1-score
 
