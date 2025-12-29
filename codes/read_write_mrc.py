@@ -1,18 +1,13 @@
 import struct
 import cupy as np
 
-
 def read_mrc(filename):
-
     filename = str(filename)
     input_image=open(filename,'rb')
-   
     num_ints=56
     sizeof_int=4
     nlines_header=10
     num_chars=80
-
-
     head1=input_image.read(num_ints*sizeof_int) # read 56 long ints
     head2=input_image.read(nlines_header*num_chars) #read 10 lines of 80 chars
     byte_pattern='=' + 'l'*num_ints   #'=' required to get machine independent standard size
@@ -29,8 +24,6 @@ def read_mrc(filename):
         imtype='H'
     else:
         type='unknown'   #should put a fail here
-
-
     num_voxels=dim[0]*dim[1]*dim[2]
     image_data=np.fromfile(file=input_image,dtype=imtype,count=num_voxels).reshape(dim)
     input_image.close()
@@ -44,7 +37,6 @@ def write_mrc(filename, im, num_ints=56, sizeof_int=4, num_chars=800):
         'f': 2,
         'H': 6
     }
-    
     mode = type_modes[im.dtype.char]
     dims = im.shape[::-1]
     header1 = struct.pack('=' + 'l'*num_ints, *(dims + (mode,) + (0,)*(num_ints - len(dims) - 1)))
