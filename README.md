@@ -6,6 +6,11 @@ create new environment using envirnemnt file: command: ./env/enviro,
 if using env file give error, just ensure all the following packages are installed:
 gc, cupy, pytirch, numpy, teno
 
+## MitoXRNet Usage
+User can train the model from scratch or use the pretrained weights from the paper to directly predict on their dataset.
+For training from sratch follow the instruictions mentioned under "Trainign from Scratch" and then predict using "Prediction" instructions
+For directlyu predicting using the pretrained mdoels, skip trining instrcutiuons and directly go to "Prediction" section.
+
 ## Training from Scratch
 #### Data preparation:
 Data/TrainingData
@@ -17,7 +22,7 @@ size example (mrc==label)
 name same ho chahiye mrc and label ka, for mapping
 labels of nucleus ==2 and labesl of mito ==5 and rest all 0
 Each 3D Image shape along any axis should be <=704. 
-make sure both raw MRCs and Labels both are in .mrc format
+make sure both raw MRCs and Labels are in .mrc format
 
 Steps:
 #### Preprocessing: 
@@ -46,10 +51,20 @@ Start the training using "Train.ipynb" , this will save best model, log files of
 10. Can evaluate predictions scores like IOU, DICE, Precision, Recall, F1-score using functions defined in "utils.py" 
 
 
-## Prediction using MitoXRNet trained model from paper
+## Directly Predict using MitoXRNet (Trained models from paper)
 #### Data preparation:
-Data/PredictionData
---> Below is the sequence wise pipeline for training and predictions.
+Keep the raw mrcs for prediction in Data/PredictionData folder
+Notes about data preparatiion:
+MitoRNet requires that idivudal cell is masked in raw MRC files (like using ACSeg (link)
+Each 3D Image shape along any axis should be <=704.
+make sure raw MRCs are in .mrc format
 
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#### Prediction
+codes/predict.py --pretrained 1 (small) 2 (large) 0 (user trained)
+1. Preprocessing
+2. Slicing
+3. Model load
+4. Predict on each slice
+5. Merge slices
+
+Final prdicted labels are saved in output/
