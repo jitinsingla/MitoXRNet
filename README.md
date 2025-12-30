@@ -8,7 +8,7 @@ Anaconda install ([link](https://docs.anaconda.com/anaconda/install/))
 conda env create -f env/environment.yml
 conda activate sxt_seg
 ```
-if using env file give error, just ensure all the following packages are installed:
+if using env file gives error, just ensure all the following packages are installed:
 gc, cupy, pytorch, numpy, pandas, tenorflow, shutil, matplotlib.
 
 ## MitoXRNet Usage
