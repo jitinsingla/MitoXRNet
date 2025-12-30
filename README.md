@@ -3,7 +3,7 @@
 ## Prerequisties / Environment Setup
 Anaconda install ([link](https://docs.anaconda.com/anaconda/install/))
 
-## Create environment (recommended):
+#### Create environment (recommended):
 ```
 conda env create -f env/environment.yml
 conda activate sxt_seg
