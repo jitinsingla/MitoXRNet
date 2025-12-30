@@ -41,7 +41,7 @@ Each mrc and mask undergoes padding, to ensure the image size matches the model'
 Each raw mrc undergoes preprocessing as proposed in MitoXRNet paper.
 Further it creates 3D slices for train and validation dataset in folder Data/Training/slices.
 
-```bash
+```
 # Run preprocessing with default 80/20 train–validation split
 python codes/preprocessing.py
 
@@ -65,21 +65,47 @@ python codes/train.py --loss_tag 0
 - `--loss_tag 0` → uses **BCEWithLogitsLoss**
 - `--model_tag 1 --loss_tag 0` → trains **UNetDeep** with **BCEWithLogitsLoss**
 
-training execution will create logs and trained model weights in the output/trainingWeights folder
-Early stopping has been intentially removed, so stop the training based on val and train error/accuracy
+Training execution will create logs and trained model weights in the `Output/Trained_Weights/` folder
+Early stopping has been intentially removed, so stop the training based on val and train error/accuracy.
 
 ## Predict
 #### Data preparation:
-Keep the raw mrcs for prediction in Data/Prediction/MRCs folder
+Keep the raw mrcs for prediction in `Data/Prediction/MRCs` folder.
 Notes:
-MitoRNet requires that idivudal cell is masked in raw MRC files (like using ACSeg (link)
-Each 3D Image shape along any axis should be <=704.
-make sure raw MRCs are in .mrc format
+MitoRNet requires that idividual cells is masked in raw MRC files (like using ACSeg ([link](https://biomedisa.info/gallery/#))
+Size example (mrc.shape == label.shape)
+Size should be in order for both MRC and Label image `(z,y,x) = (z,y,x)`
+Make sure both raw MRCs and Labels are in .mrc format.
+Name should be same of both MRC file and corresponding Label file for correct mapping.
+Name should be in a specific format only.
+`<EXPERIMENT_METADATA>_<CELLID>_pre_rec.mrc`
+Example CELLID:- `1111_13, 1128_1-2`
+Example FullName:- `KLW_PBC_INS1e_Ex-4_5min_1111_13_pre_rec.mrc`
+Labels of Nucleus `2` , Labels of Mitochondria `5` , Labels of Cytoplasm `1` and rest all `0`
+Each 3D Image shape along any axis should be `<=704`.
 
 #### Prediction
-codes/predict.py --pretrained 1 (small) 2 (large) 0 (user trained)
-0: If user tained the model and weights have been saved in output/trainingWeights folder
-1/2: For pretrained model weights reported in paper, 1 for smaller network (1.4 Million paramters) and 2 for ....
+```
+# Full evaluation pipeline (default)
+python codes/evaluate.py
+```
+### Tag & Keyword Summary
+
+| Flag / Mode | Description |
+|------------|-------------|
+| *(default)* | Runs **preprocessing → prediction → evaluation** using **UNet**, **user-trained weights**, threshold = `0.6` |
+| `--model_tag 1` | Use **UNetDeep** architecture (larger network) |
+| `--pretrained 0` | Use **user-trained weights** from `Output/Trained_Weights/` |
+| `--pretrained 1` | Use **pretrained UNet** weights (paper) |
+| `--pretrained 2` | Use **pretrained UNetDeep** weights (paper) |
+| `--threshold <value>` | Set prediction & evaluation threshold (default = `0.6`) |
+| `--only_preprocessing` | Run **only preprocessing** |
+| `--skip_preprocessing` | Skip preprocessing, run **prediction + evaluation** |
+| `--only_prediction` | Run **only prediction** |
+| `--only_metrics` | Run **only evaluation** (predictions must exist) |
+
+`--only_prediction` and `--only_metrics` cannot be used together
+
 The predict.py code performs the folloing steps:
 1. Preprocessing (sved in output/Prediction/mrc_predict_preprocessed)
 2. Slicing (output/Prediction/mrc_predict_slices)
