@@ -23,17 +23,33 @@ Data in this folder is used for training the model from scratch. The data in thi
 To prepare the data for training, copy raw mrc files in `Data/Traning/MRCs` and ground truth labels in `Data/Traning/Labels`.
 
 #### Notes about data preparation:
-MitoRNet requires that idivudal cell is masked in raw MRC files (like using ACSeg ([link](https://biomedisa.info/gallery/#))
-Size example (mrc.shape == label.shape)
-Size should be in order for both MRC and Label image `(z,y,x) = (z,y,x)`
-Make sure both raw MRCs and Labels are in .mrc format.
-Name should be same of both MRC file and corresponding Label file for correct mapping.
-Name should be in a specific format only.
-`<EXPERIMENT_METADATA>_<CELLID>_pre_rec.mrc`
-Example CELLID:- `1111_13` , `1128_1-2`
-Example FullName:- `KLW_PBC_INS1e_Ex-4_5min_1111_13_pre_rec.mrc`
-Labels of Nucleus = `2` , Labels of Mitochondria = `5` , Labels of Cytoplasm = `1` and rest all `0`
-Each 3D Image shape along any axis should be `<=704`. 
+### Data Requirements & Naming Convention
+
+- MitoXRNet requires that **each raw MRC contains a single masked cell**, e.g. using ACSeg ([Link](https://biomedisa.info/gallery/#))
+
+- Raw MRC and corresponding label must have **identical shape**  
+  `(z, y, x) = (z, y, x)`
+
+- Both raw images and labels must be in **`.mrc` format**
+
+- Raw MRC filename and its corresponding label filename **must be identical** for correct mapping
+
+- Filenames must follow the required format:  
+  `<EXPERIMENT_METADATA>_<CELLID>_pre_rec.mrc`
+
+  **CELLID examples:** `1111_13`, `1128_1-2`  
+  **Full filename example:**  
+  `KLW_PBC_INS1e_Ex-4_5min_1111_13_pre_rec.mrc`
+
+- Label encoding must follow:
+  - `0` → background  
+  - `1` → cytoplasm  
+  - `2` → nucleus  
+  - `5` → mitochondria  
+
+- Each 3D image dimension must satisfy:  
+  **size ≤ `704` along every axis**
+
 
 Steps:
 #### Preprocessing: 
