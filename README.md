@@ -1,38 +1,53 @@
-# MitoXRNet
+# 🧬 MitoXRNet 
 
 ## Prerequisties / Environment Setup
-Anaconda install (link on how to install)
-create new environment using envirnemnt file: command: ./env/enviro,
+Anaconda install ([link](https://docs.anaconda.com/anaconda/install/))
+
+Create environment (recommended):
+```
+conda env create -f env/environment.yml
+conda activate sxt_seg
+```
 if using env file give error, just ensure all the following packages are installed:
-gc, cupy, pytirch, numpy, teno
+gc, cupy, pytorch, numpy, pandas, tenorflow, shutil, matplotlib.
 
 ## MitoXRNet Usage
 User can train the model from scratch or use the pretrained weights from the paper to directly predict on their dataset.
-For training from sratch follow the instruictions mentioned under "Trainign from Scratch" and then predict using "Prediction" instructions
-For directlyu predicting using the pretrained mdoels, skip trining instrcutiuons and directly go to "Prediction" section.
+For training from sratch follow the instructions mentioned under "Training from Scratch" and then predict using "Prediction" instructions.
+For directly predicting using the pretrained models, skip training instructions and directly go to "Prediction" section.
 
 ## Training from Scratch
 #### Data preparation:
-Data/Training
-Data in this folder is used for traingin the model from mstratch. The data in this flder will besplit into trining and val in x, y %
-1. To prepare the data for training copy raw mrc files in Data/Traning/MRCs and ground truth labels in Data/Traning/Labels
-Notes about data preparatiion:
-MitoRNet requires that idivudal cell is masked in raw MRC files (like using ACSeg (link)
-size example (mrc==label)
-name same ho chahiye mrc and label ka, for mapping
-labels of nucleus ==2 and labesl of mito ==5 and rest all 0
+Folder: Data/Training
+Data in this folder is used for training the model from scratch. The data in this folder will be split into training and validation sets in x, y %
+1. To prepare the data for training, copy raw mrc files in Data/Traning/MRCs and ground truth labels in Data/Traning/Labels.
+Notes about data preparation:
+MitoRNet requires that idivudal cell is masked in raw MRC files (like using ACSeg ([link](https://biomedisa.info/gallery/#))
+Size example (mrc.shape == label.shape)
+Size should be in order for both MRC and Label image (z,y,x) = (z,y,x)
+Make sure both raw MRCs and Labels are in .mrc format.
+Name should be same of both MRC file and corresponding Label file for correct mapping.
+Name should be in a specific format only.
+<EXPERIMENT_METADATA>_<CELLID>_pre_rec.mrc
+Example CELLID:- 1111_13, 1128_1-2
+Example FullName:- KLW_PBC_INS1e_Ex-4_5min_1111_13_pre_rec.mrc
+Labels of Nucleus = 2 , Labels of Mitochondria = 5 , Labels of Cytoplasm = 1 and rest all 0
 Each 3D Image shape along any axis should be <=704. 
-make sure both raw MRCs and Labels are in .mrc format
 
 Steps:
 #### Preprocessing: 
-Here all the raw mrcs and masks are split in train and val folders inside Data/Training folder (i.e. mrc_train, mrc_val, mask_train and mask_val)
-Each mrc and mask undergoes padding, to ensure the image size mat hes model requirement.
+Here all the raw mrcs and masks are split in train and validation folders inside Data/Training folder (i.e. mrc_train, mrc_val, mask_train and mask_val)
+Each mrc and mask undergoes padding, to ensure the image size matches the model's input requirement.
 Each raw mrc undergoes preprocessing as proposed in MitoXRNet paper.
-Further it creates 3D slices for train and val dataset in folder Data/Training/slices.
+Further it creates 3D slices for train and validation dataset in folder Data/Training/slices.
 
-run:
+```bash
+# Run preprocessing with default 80/20 train–validation split
 python codes/preprocessing.py
+
+# Optionally, change the train/validation split ratio
+python codes/preprocessing.py --split_ratio 0.7
+```
 
 #### Training:
 python codes/train.py --modelSize 0 (small), 1 (large UNetDeep)
