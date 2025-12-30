@@ -50,7 +50,21 @@ python codes/preprocessing.py --split_ratio 0.7
 ```
 
 #### Training:
-python codes/train.py --modelSize 0 (small), 1 (large UNetDeep)
+```
+# Train using default configuration (UNet + CombinedLoss)
+python codes/train.py
+
+# Train using UNetDeep (larger network)
+python codes/train.py --model_tag 1
+
+# Train using BCEWithLogitsLoss instead of CombinedLoss
+python codes/train.py --loss_tag 0
+```
+- Default command trains **UNet** with **CombinedLoss**
+- `--model_tag 1` → trains **UNetDeep (larger network)**
+- `--loss_tag 0` → uses **BCEWithLogitsLoss**
+- `--model_tag 1 --loss_tag 0` → trains **UNetDeep** with **BCEWithLogitsLoss**
+
 training execution will create logs and trained model weights in the output/trainingWeights folder
 Early stopping has been intentially removed, so stop the training based on val and train error/accuracy
 
