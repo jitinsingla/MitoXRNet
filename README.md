@@ -84,7 +84,11 @@ Example FullName:- `KLW_PBC_INS1e_Ex-4_5min_1111_13_pre_rec.mrc`
 Labels of Nucleus `2` , Labels of Mitochondria `5` , Labels of Cytoplasm `1` and rest all `0`
 Each 3D Image shape along any axis should be `<=704`.
 
-#### Prediction
+#### Evaluation
+`evaluate.py` runs the complete MitoXRNet inference pipeline, including preprocessing, slice-wise prediction, and class-wise evaluation.  
+It supports flexible execution modes such as **preprocessing only**, **prediction only**, **evaluation only**, or the full pipeline.  
+Segmentation performance is reported using IoU, Dice, Precision, and Recall for both nucleus and mitochondria.
+
 ```
 # Full evaluation pipeline (default)
 python codes/evaluate.py
@@ -93,11 +97,11 @@ python codes/evaluate.py
 
 | Flag / Mode | Description |
 |------------|-------------|
-| *(default)* | Runs **preprocessing → prediction → evaluation** using **UNet**, **user-trained weights**, threshold = `0.6` |
+| **(default)** | Runs **preprocessing → prediction → evaluation** using **UNet**, **user-trained weights**, threshold = `0.6` |
 | `--model_tag 1` | Use **UNetDeep** architecture (larger network) |
 | `--pretrained 0` | Use **user-trained weights** from `Output/Trained_Weights/` |
-| `--pretrained 1` | Use **pretrained UNet** weights (paper) |
-| `--pretrained 2` | Use **pretrained UNetDeep** weights (paper) |
+| `--pretrained 1` | Use **pretrained UNet** weights from paper `Output/Pretrained_Weights/`|
+| `--pretrained 2` | Use **pretrained UNetDeep** weights from paper `Output/Pretrained_Weights/` |
 | `--threshold <value>` | Set prediction & evaluation threshold (default = `0.6`) |
 | `--only_preprocessing` | Run **only preprocessing** |
 | `--skip_preprocessing` | Skip preprocessing, run **prediction + evaluation** |
@@ -106,19 +110,12 @@ python codes/evaluate.py
 
 `--only_prediction` and `--only_metrics` cannot be used together
 
-The predict.py code performs the folloing steps:
-1. Preprocessing (sved in output/Prediction/mrc_predict_preprocessed)
-2. Slicing (output/Prediction/mrc_predict_slices)
+The above mentioned code performs the following steps:
+1. Preprocessing  `Data/Prediction/Processed_MRCs`
+2. Slicing  `Data/Prediction/MRC_predict_slices`
 3. Model load
-4. Predict on each slice (output/Prediction/predictedLabels_Slice_temp)
+4. Predict on each slice  `Data/Prediction/MRC_prediction_slices_temp`
 5. Merge slices
 
-Final prdicted labels are saved in **output/Prediction/predictedLabels** (give anti-padded sizes)
-
-
-#### Evaluation
-User can evaluate the predicted labels against the user provided labels.
-keep the user provided labels in Data/Prediction/Labels (make sure the raw mrcs and labels follow critetria as metioned under Notes in data preparation of training from scratch setion)
-run codes/evaluate.py
-Code will evaluate predictions scores like IOU, DICE, Precision, Recall, F1-score
-
+Final predicted labels are saved in `Data/Prediction/PredictedLabels` **(at original GT label sizes)**
+Evaluation metric results on IOU, Dice, Precision, Recall will be displayed on terminal and a json file will be saved inside `Outputs/Evaluation_results` folder.
