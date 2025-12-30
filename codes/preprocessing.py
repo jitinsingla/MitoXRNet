@@ -41,12 +41,8 @@ def preprocessing(split_ratio = 0.8):
 
         
         for img_name,mask_name in zip(img_name_list, mask_name_list):
-
-            # img_path = os.path.join(img_directory, img_name)
-            # mask_path = os.path.join(mask_directory, mask_name)
-
-            img = read_mrc(img_name)  #.get()
-            mask = read_mrc(mask_name)#.get()
+            img = read_mrc(img_name)  
+            mask = read_mrc(mask_name)
             assert img.shape == mask.shape, "Mask and image don't match."
 
             if any(dim > 704 for dim in img.shape):
@@ -81,7 +77,7 @@ def preprocessing(split_ratio = 0.8):
             if filename.endswith('.mrc'):  
                 image_path = os.path.join(path_to_subfolder, filename)
 
-                image = read_mrc(image_path)#.get()
+                image = read_mrc(image_path)
 
                 img_name, _ = os.path.splitext(filename)
 
