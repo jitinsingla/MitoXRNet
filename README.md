@@ -84,7 +84,12 @@ python codes/train.py --loss_tag 0
 Training execution will create logs and save trained model weights in the `Output/Trained_Weights/` folder.
 Early stopping has been intentially removed, so stop the training based on val and train error/accuracy.
 
-## Predict
+## Prediction and Evaluation
+
+`evaluate.py` runs the complete MitoXRNet inference pipeline, including preprocessing, slice-wise prediction, and class-wise evaluation.  
+It supports flexible execution modes such as **preprocessing only**, **prediction only**, **evaluation only**, or the full pipeline.  
+Segmentation performance is reported using IoU, Dice, Precision, and Recall for both nucleus and mitochondria.
+
 #### Data preparation:
 Keep the raw mrcs for prediction in `Data/Prediction/MRCs` folder.
 #### Data Requirements & Naming Convention
@@ -113,11 +118,6 @@ Keep the raw mrcs for prediction in `Data/Prediction/MRCs` folder.
 
 - Each 3D image dimension must satisfy:  
   **size ≤ `704` along every axis**
-
-#### Evaluation
-`evaluate.py` runs the complete MitoXRNet inference pipeline, including preprocessing, slice-wise prediction, and class-wise evaluation.  
-It supports flexible execution modes such as **preprocessing only**, **prediction only**, **evaluation only**, or the full pipeline.  
-Segmentation performance is reported using IoU, Dice, Precision, and Recall for both nucleus and mitochondria.
 
 ```
 # Full evaluation pipeline (default)
