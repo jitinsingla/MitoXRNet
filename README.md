@@ -22,7 +22,6 @@ Folder: `Data/Training`
 Data in this folder is used for training the model from scratch. The data in this folder will be split into training and validation sets in x, y %
 To prepare the data for training, copy raw mrc files in `Data/Traning/MRCs` and ground truth labels in `Data/Traning/Labels`.
 
-### Notes about data preparation:
 #### Data Requirements & Naming Convention
 
 - MitoXRNet requires that **each raw MRC contains a single masked cell**, e.g. using ACSeg ([Link](https://biomedisa.info/gallery/#))
