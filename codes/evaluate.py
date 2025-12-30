@@ -13,6 +13,8 @@ import json
 from rich.table import Table
 from rich.console import Console
 import shutil, time, re
+import argparse
+
 
 # =========================
 # Global path configuration
@@ -38,10 +40,7 @@ MERGED_MITO_DIR = os.path.join(BASE_PRED_DIR, "CombinedLossUNetPredictionMerged_
 def pred_out_dir(threshold):
     return os.path.join(BASE_PRED_DIR, f"PredictedLabels/Predicted_labels_Th{threshold}_Images")
 
-
 def preprocessing():
-    
-    
     print("\n----- Preprocessing Test Data -----\n")
 
     os.makedirs(PROCESSED_DIR, exist_ok=True)
@@ -54,10 +53,8 @@ def preprocessing():
     mask_name_list =  sorted(glob.glob(os.path.join(LABEL_DIR, "*.mrc")))
 
     for img_name,mask_name in zip(img_name_list, mask_name_list):
-
         img = read_mrc(img_name)
         mask = read_mrc(mask_name)
-        
         assert img.shape == mask.shape, "Mask and image don't match."
 
         if any(dim > 704 for dim in img.shape):
@@ -93,7 +90,6 @@ def preprocessing():
     
 
 def prediction(model_tag=0, pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss', Threshold = 0.6):
-    
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f'\n{device} founded, using it for Testing')
     if model_tag == 0:
@@ -208,7 +204,6 @@ def prediction(model_tag=0, pretrained = 0, Model_name = 'Trained_model_UNet_Com
                 addImage[startIndex:endIndex, :, :] += v
                 counterImage[startIndex:endIndex, :, :] += counterSlice
             addImage = addImage/counterImage
-            # addImage = addImage>0.6
             filename = os.path.join(j, cellIds[cellId]["mergedfileName"])
             write_mrc(filename, addImage.astype(cp.float32))
             print(f"Saved: {filename}\n")
@@ -265,9 +260,7 @@ def prediction(model_tag=0, pretrained = 0, Model_name = 'Trained_model_UNet_Com
 
     
 def metrics_eval(threshold=0.6):
-
     pred_dir = pred_out_dir(threshold=threshold)
-
     Predictions = sorted(glob.glob(os.path.join(pred_dir, "*.mrc")))
     GT_Labels   = sorted(glob.glob(os.path.join(LABEL_DIR, "*.mrc")))
 
@@ -280,13 +273,11 @@ def metrics_eval(threshold=0.6):
     table.add_column("Index", justify="center", width = 5)
     table.add_column("File", justify="left")
 
-    # ---- Nucleus columns ----
     table.add_column("Nuc IoU",  justify="center", width=6)
     table.add_column("Nuc Dice", justify="center", width=6)
     table.add_column("Nuc Prec", justify="center", width=6)
     table.add_column("Nuc Rec",  justify="center", width=6)
     
-    # ---- Mito columns ----
     table.add_column("Mito IoU",  justify="center", width=6)
     table.add_column("Mito Dice", justify="center", width=6)
     table.add_column("Mito Prec", justify="center", width=6)
@@ -294,12 +285,10 @@ def metrics_eval(threshold=0.6):
 
     results = []
 
-    # running means
     sums = {
         "nuc_iou": 0.0, "nuc_dice": 0.0, "nuc_prec": 0.0, "nuc_rec": 0.0,
         "mito_iou": 0.0, "mito_dice": 0.0, "mito_prec": 0.0, "mito_rec": 0.0,
     }
-
     for idx, (pred_path, gt_path) in enumerate(zip(Predictions, GT_Labels)):
 
         pred = read_mrc(pred_path)
@@ -331,13 +320,11 @@ def metrics_eval(threshold=0.6):
         sums["mito_rec"]  += mito_rec
 
         fname = os.path.basename(pred_path)
-
         table.add_row(
             str(idx), fname,
             f"{nuc_iou:.2f}",  f"{nuc_dice:.2f}",  f"{nuc_prec:.2f}",  f"{nuc_rec:.2f}",
             f"{mito_iou:.2f}", f"{mito_dice:.2f}", f"{mito_prec:.2f}", f"{mito_rec:.2f}",
         )
-
         results.append({
             "file": fname,
             "nucleus": {
@@ -349,9 +336,7 @@ def metrics_eval(threshold=0.6):
                 "precision": mito_prec, "recall": mito_rec
             }
         })
-
     n = len(results)
-
     table.add_section()
     table.add_row(
         "—", "               MEAN",
@@ -360,9 +345,7 @@ def metrics_eval(threshold=0.6):
         f"{sums['mito_iou']/n:.4f}", f"{sums['mito_dice']/n:.4f}",
         f"{sums['mito_prec']/n:.4f}", f"{sums['mito_rec']/n:.4f}",
     )
-
     console.print(table)
-
     # ---- Save JSON ----
     out_json = f"../Outputs/Evaluation_results/Metrics_threshold_{threshold}_results.json"
     os.makedirs('../Outputs/Evaluation_results/', exist_ok = True)
@@ -386,69 +369,53 @@ def metrics_eval(threshold=0.6):
             },
             "results": results
         }, f, indent=4)
-
     print()
     print(f"\nSaved metrics results to: {out_json}")
-
-
-import argparse
-
-import argparse
-
+    
 def main():
     parser = argparse.ArgumentParser(description="MitoXRNet Full Pipeline")
-
     parser.add_argument(
         "--model_tag", type=int, default=0,
         help="0 = UNet, 1 = UNetDeep (default = 0)"
     )
-
     parser.add_argument(
         "--pretrained", type=int, default=0,
         help="0 = Trained Model, 1 = UNet, 2 = UNetDeep (default = 0)"
     )
-
     parser.add_argument(
         "--threshold", type=float, default=0.6,
         help="Threshold for prediction and metrics (default = 0.6)"
     )
-
     parser.add_argument(
         "--only_preprocessing",
         action="store_true",
         help="Run ONLY preprocessing and exit"
     )
-
     parser.add_argument(
         "--skip_preprocessing",
         action="store_true",
         help="Skip preprocessing step (assumes preprocessed data already exists)"
     )
-
     parser.add_argument(
         "--only_prediction",
         action="store_true",
         help="Run ONLY prediction (skip preprocessing and metrics)"
     )
-
     parser.add_argument(
         "--only_metrics",
         action="store_true",
         help="Run ONLY metric evaluation (assumes predictions already exist)"
     )
-
     args = parser.parse_args()
 
     if args.only_prediction and args.only_metrics:
         raise ValueError("Choose only one: --only_prediction OR --only_metrics")
-
     if args.only_preprocessing and (
         args.only_prediction or args.only_metrics
     ):
         raise ValueError(
             "--only_preprocessing cannot be combined with prediction or metrics flags"
         )
-
     if args.only_preprocessing:
         print()
         print("---------- Running ONLY Preprocessing ----------\n")
@@ -456,11 +423,9 @@ def main():
         preprocessing()
         print("\n---------- Preprocessing Completed ----------\n")
         return
-
     if not args.skip_preprocessing and not args.only_metrics:
         print("\n---------- Starting Preprocessing ----------\n")
         preprocessing()
-
     # ---- prediction ----
     if not args.only_metrics:
         print("\n---------- Starting Prediction ----------\n")
@@ -470,15 +435,11 @@ def main():
             Model_name="Trained_model_UNet_CombinedLoss",
             Threshold=args.threshold
         )
-
     # ---- metrics ----
     if not args.only_prediction:
-        
         print("\n-------------- Calculating Metrics Score on Predicted Cells --------------\n")
         metrics_eval(threshold=args.threshold)
-
     print("\n---------- Pipeline Completed ----------\n")
-
 
 if __name__ == "__main__":
     main()
