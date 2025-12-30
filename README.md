@@ -24,7 +24,7 @@ To prepare the data for training, copy raw mrc files in `Data/Traning/MRCs` and 
 
 #### Data Requirements & Naming Convention
 
-- MitoXRNet requires that **each raw MRC contains a single masked cell**, e.g. using ACSeg ([Link](https://biomedisa.info/gallery/#))
+- MitoXRNet requires that **each raw MRC contains a single masked cell**, e.g. ACSeg ([Link](https://biomedisa.info/gallery/#)) can be used.
 
 - Raw MRC and corresponding label must have **identical shape**  
   `(z, y, x) = (z, y, x)`
