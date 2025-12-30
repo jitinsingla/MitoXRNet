@@ -52,10 +52,8 @@ class DecoderBlock(nn.Module):
 class UNet(nn.Module):
     def __init__(self, num_classes, input_shape = (1,64,704,704)):
         super(UNet, self).__init__()
-        
         self.input_shape = input_shape
         self.num_classes = num_classes
-
         self.encoder1 = EncoderBlock(1,8)           
         self.encoder2 = EncoderBlock(8,16) 
         self.encoder3 = EncoderBlock(16,32)
@@ -84,12 +82,9 @@ class UNet(nn.Module):
 class UNetDeep(nn.Module):
     def __init__(self, num_classes, input_shape = (1,64,704,704)):
         super(UNetDeep, self).__init__()
-        
+        unit = 16
         self.input_shape = input_shape
         self.num_classes = num_classes
-        
-        unit = 16
-        
         self.encoder1 = EncoderBlock(1,unit)         # 1 kernels   
         self.encoder2 = EncoderBlock(unit,2*unit)    # 16 kernels
         self.encoder3 = EncoderBlock(2*unit,4*unit)  # 32 kernels
