@@ -3,7 +3,7 @@
 ## Prerequisties / Environment Setup
 Anaconda install ([link](https://docs.anaconda.com/anaconda/install/))
 
-Create environment (recommended):
+## Create environment (recommended):
 ```
 conda env create -f env/environment.yml
 conda activate sxt_seg
@@ -13,26 +13,27 @@ gc, cupy, pytorch, numpy, pandas, tenorflow, shutil, matplotlib.
 
 ## MitoXRNet Usage
 User can train the model from scratch or use the pretrained weights from the paper to directly predict on their dataset.
-For training from sratch follow the instructions mentioned under "Training from Scratch" and then predict using "Prediction" instructions.
-For directly predicting using the pretrained models, skip training instructions and directly go to "Prediction" section.
+For training from sratch follow the instructions mentioned under **"Training from Scratch"** and then predict using **"Prediction"** instructions.
+For directly predicting using the pretrained models, skip training instructions and directly go to **"Prediction"** section.
 
 ## Training from Scratch
 #### Data preparation:
-Folder: Data/Training
+Folder: `Data/Training`
 Data in this folder is used for training the model from scratch. The data in this folder will be split into training and validation sets in x, y %
-1. To prepare the data for training, copy raw mrc files in Data/Traning/MRCs and ground truth labels in Data/Traning/Labels.
-Notes about data preparation:
+To prepare the data for training, copy raw mrc files in `Data/Traning/MRCs` and ground truth labels in `Data/Traning/Labels`.
+
+#### Notes about data preparation:
 MitoRNet requires that idivudal cell is masked in raw MRC files (like using ACSeg ([link](https://biomedisa.info/gallery/#))
 Size example (mrc.shape == label.shape)
-Size should be in order for both MRC and Label image (z,y,x) = (z,y,x)
+Size should be in order for both MRC and Label image `(z,y,x) = (z,y,x)`
 Make sure both raw MRCs and Labels are in .mrc format.
 Name should be same of both MRC file and corresponding Label file for correct mapping.
 Name should be in a specific format only.
-<EXPERIMENT_METADATA>_<CELLID>_pre_rec.mrc
-Example CELLID:- 1111_13, 1128_1-2
-Example FullName:- KLW_PBC_INS1e_Ex-4_5min_1111_13_pre_rec.mrc
-Labels of Nucleus = 2 , Labels of Mitochondria = 5 , Labels of Cytoplasm = 1 and rest all 0
-Each 3D Image shape along any axis should be <=704. 
+`<EXPERIMENT_METADATA>_<CELLID>_pre_rec.mrc`
+Example CELLID:- `1111_13` , `1128_1-2`
+Example FullName:- `KLW_PBC_INS1e_Ex-4_5min_1111_13_pre_rec.mrc`
+Labels of Nucleus = `2` , Labels of Mitochondria = `5` , Labels of Cytoplasm = `1` and rest all `0`
+Each 3D Image shape along any axis should be `<=704`. 
 
 Steps:
 #### Preprocessing: 
