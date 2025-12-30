@@ -5,6 +5,7 @@ from patchify import patchify, unpatchify
 from scipy import ndimage
 import struct
 import matplotlib.pyplot as plt
+
 def normalisation(img):
     norm_img = (img-img.min())/(img.max()-img.min())
     return norm_img
@@ -19,7 +20,6 @@ def anti_padding(img, target_size):
         raise ValueError("Target size must be smaller than or equal to the input image size for anti-padding.")
     crop_slices = [slice((img.shape[i] - target_size[i]) // 2, (img.shape[i] - target_size[i]) // 2 + target_size[i]) for i in range(3)]
     cropped_img = img[crop_slices[0], crop_slices[1], crop_slices[2]]
-    
     return cropped_img
 
 def mask_crop(image, labels):
@@ -93,7 +93,7 @@ def create_and_save_slices(img, img_name, output_folder):
             write_mrc(patch_path, patch)
     print(f'Slices created for {img_name} at {output_folder}')
 
-def read_mrc(filename, tag = "Numpy"):
+def read_mrc(filename):
     filename = str(filename)
     input_image=open(filename,'rb')
     num_ints=56
@@ -119,11 +119,7 @@ def read_mrc(filename, tag = "Numpy"):
         type='unknown'   #should put a fail here
         
     num_voxels=dim[0]*dim[1]*dim[2]
-    if tag == "Cupy":
-        image_data=cp.fromfile(file=input_image,dtype=imtype,count=num_voxels).reshape(dim)
-    else:
-        image_data=np.fromfile(file=input_image,dtype=imtype,count=num_voxels).reshape(dim)
-        
+    image_data=np.fromfile(file=input_image,dtype=imtype,count=num_voxels).reshape(dim)
     input_image.close()
     return image_data
 
@@ -193,6 +189,7 @@ def hpf_sobel(image):
     gradient_x = ndimage.sobel(image, axis=1, mode='constant')
     gradient_y = ndimage.sobel(image, axis=0, mode='constant')
     gradient_z = ndimage.sobel(image, axis=2, mode='constant')
+    
     # Combine the gradients to get the magnitude of the gradient
     sobel_magnitude = np.sqrt(gradient_x**2 + gradient_y**2 + gradient_z**2)
     return sobel_magnitude
