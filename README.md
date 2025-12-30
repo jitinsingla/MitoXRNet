@@ -147,5 +147,6 @@ The above mentioned code performs the following steps:
 4. Predict on each slice  `Data/Prediction/MRC_prediction_slices_temp`
 5. Merge slices
 
-Final predicted labels are saved in `Data/Prediction/PredictedLabels` **(at original GT label sizes)**
-Evaluation metric results on IOU, Dice, Precision, Recall will be displayed on terminal and a json file will be saved inside `Outputs/Evaluation_results` folder.
+Final predicted labels are saved in `Data/Prediction/PredictedLabels` **(at original ground-truth label sizes)**.<br>
+Evaluation metrics (IoU, Dice, Precision, Recall) are displayed in the terminal and saved as a JSON file in `Outputs/Evaluation_results/`.
+
