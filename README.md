@@ -81,7 +81,7 @@ python codes/train.py --loss_tag 0
 - `--loss_tag 0` → uses **BCEWithLogitsLoss**
 - `--model_tag 1 --loss_tag 0` → trains **UNetDeep** with **BCEWithLogitsLoss**
 
-Training execution will create logs and trained model weights in the `Output/Trained_Weights/` folder
+Training execution will create logs and save trained model weights in the `Output/Trained_Weights/` folder.
 Early stopping has been intentially removed, so stop the training based on val and train error/accuracy.
 
 ## Predict
