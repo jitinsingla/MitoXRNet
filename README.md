@@ -91,7 +91,7 @@ It supports flexible execution modes such as **preprocessing only**, **predictio
 Segmentation performance is reported using IoU, Dice, Precision, and Recall for both nucleus and mitochondria.
 
 #### Data preparation:
-Keep the raw mrcs for prediction in `Data/Prediction/MRCs` folder.
+Keep the raw mrcs for prediction in `Data/Prediction/MRCs` folder and corresponding ground truth labels in `Data/Prediction/Labels` folder.
 #### Data Requirements & Naming Convention
 
 - MitoXRNet requires that **each raw MRC contains a single masked cell**, e.g. ACSeg ([Link](https://biomedisa.info/gallery/#)) can be used.
