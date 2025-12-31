@@ -1,4 +1,4 @@
-# 🧬 MitoXRNet 
+# MitoXRNet 
 
 ## Prerequisties / Environment Setup
 Install Anaconda for setup ([link](https://docs.anaconda.com/anaconda/install/))
@@ -33,12 +33,9 @@ To prepare the data for training, copy raw mrc files in `Data/Traning/MRCs` and 
 - Each dimension of the image should be less than 704.
 
 
-Steps:
-#### Preprocessing: 
-Here all the raw mrcs and masks are split in train and validation folders inside Data/Training folder (i.e. mrc_train, mrc_val, mask_train and mask_val)
-Each mrc and mask undergoes padding, to ensure the image size matches the model's input requirement.
-Each raw mrc undergoes preprocessing as proposed in MitoXRNet paper.
-Further it creates 3D slices for train and validation dataset in folder Data/Training/slices.
+#### Steps:
+##### Preprocessing: 
+Here all the raw mrcs and masks are split in train and validation folders inside `Data/Training folder` (i.e. new folder are created `mrc_train`, `mrc_val`, `mask_train` and `mask_val`). Each mrc and mask undergoes padding, to ensure the image size matches the model's input requirement. Each raw mrc undergoes preprocessing as proposed in MitoXRNet paper. Further it creates 3D slices for train and validation dataset in folder `Data/Training/slices`.
 
 ```
 # Run preprocessing with default 80/20 train–validation split
@@ -48,7 +45,7 @@ python codes/preprocessing.py
 python codes/preprocessing.py --split_ratio 0.7
 ```
 
-#### Training:
+##### Training:
 ```
 # Train using default configuration (UNet + CombinedLoss)
 python codes/train.py
