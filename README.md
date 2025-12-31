@@ -1,7 +1,7 @@
 # 🧬 MitoXRNet 
 
 ## Prerequisties / Environment Setup
-Anaconda install ([link](https://docs.anaconda.com/anaconda/install/))
+Install Anaconda for setup ([link](https://docs.anaconda.com/anaconda/install/))
 
 #### Create environment (recommended):
 ```
@@ -21,17 +21,11 @@ For directly predicting using the pretrained models, skip training instructions 
 Data in folder `Data/Training` is used for training the model from scratch. Available data will be split into training and validation sets in approximately 95:5 ratio. In paper, 52 cells were split into 49 training and 3 validation cells. Additionally 3 cells were kept for Prediction.
 To prepare the data for training, copy raw mrc files in `Data/Traning/MRCs` and ground truth labels in `Data/Traning/Labels`.
 
-#### Data Requirements & Naming Convention
-
-- MitoXRNet requires that **each raw MRC contains a single masked cell**, e.g. ACSeg ([Link](https://biomedisa.info/gallery/#)) can be used.
-
-- Raw MRC and corresponding label must have **identical shape**  
-  `(z, y, x) = (z, y, x)`
-
+#### Data Requirements & Naming Convention:
+- MitoXRNet requires that **raw MRC is already segmented for cell membrane/cytosolic region**, e.g. using ACSeg ([Link](https://biomedisa.info/gallery/#)).
+- Raw MRC and corresponding label must have **identical shape**, e.g. both raw mrc and corresponding label has shape `(425, 430, 410)`. Each independent raw mrc can be of different size.
 - Both raw images and labels must be in **`.mrc` format**
-
-- Raw MRC filename and its corresponding label filename **must be identical** for correct mapping
-
+- Raw MRC filename and its corresponding label filename **must be same** for correct mapping
 - Filenames must follow the required format:  
   `<EXPERIMENT_METADATA>_<CELLID>_pre_rec.mrc`
 
