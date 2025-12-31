@@ -46,8 +46,6 @@ def train_epoch(model, dataloader, loss_fn, optimizer, device):
         optimizer.zero_grad()
 
         outputs = model(inputs)
-
-        # pred = torch.argmax(outputs[0], dim=1) 
         pred = torch.sigmoid(outputs)
         pred = (pred>0.6).float()
         dice_1 = dice_scoreBCE(pred, labels, 0) # Nucleus
@@ -97,11 +95,8 @@ def train_epoch_with_accumulation(model, dataloader, loss_fn, optimizer, device,
             total_dice_nucleus += dice_1.item()
             total_dice_mito += dice_2.item()
 
-        # 2. Scale the loss by the number of accumulation steps
-        with torch.no_grad():
-            probs = torch.sigmoid(outputs)
-        Soft_labels = beta*labels + (1-beta)*probs
-        loss = loss_fn(outputs, Soft_labels)
+        
+        loss = loss_fn(outputs, labels)
         loss = loss / accumulation_steps
         
         # 3. Accumulate the gradients
@@ -139,7 +134,6 @@ def evaluate_model(model, dataloader, loss_fn, device):
 
             outputs = model(inputs)
 
-            # pred = torch.argmax(outputs[0], dim=1)
             pred = torch.sigmoid(outputs)
             pred = (pred>0.6).float()
             dice_1 = dice_scoreBCE(pred, labels, 0) # Nucleus
@@ -162,7 +156,6 @@ def evaluate_model(model, dataloader, loss_fn, device):
         pbar.close()
 
     return total_loss / len(dataloader), total_dice_nucleus / len(dataloader), total_dice_mito / len(dataloader)
-
 
 def Initialization(model_tag = 0, loss_tag=1):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
