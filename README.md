@@ -18,7 +18,7 @@ For directly predicting using the pretrained models, skip training instructions 
 
 ## Training from Scratch
 #### Data preparation:
-Data in folder `Data/Training` is used for training the model from scratch. Available data will be split into training and validation sets in x, y %
+Data in folder `Data/Training` is used for training the model from scratch. Available data will be split into training and validation sets in approximately 95:5 ratio. In paper, 52 cells were split into 49 training and 3 validation cells. Additionally 3 cells were kept for Prediction.
 To prepare the data for training, copy raw mrc files in `Data/Traning/MRCs` and ground truth labels in `Data/Traning/Labels`.
 
 #### Data Requirements & Naming Convention
