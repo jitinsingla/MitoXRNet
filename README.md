@@ -13,13 +13,12 @@ gc, cupy, pytorch, numpy, pandas, tenorflow, shutil, matplotlib.
 
 ## MitoXRNet Usage
 User can train the model from scratch or use the pretrained weights from the paper to directly predict on their dataset.
-For training from sratch follow the instructions mentioned under **"Training from Scratch"** and then predict using **"Prediction"** instructions.
+For training from scratch follow the instructions mentioned under **"Training from Scratch"** and then predict using **"Prediction"** instructions.
 For directly predicting using the pretrained models, skip training instructions and directly go to **"Prediction"** section.
 
 ## Training from Scratch
 #### Data preparation:
-Folder: `Data/Training`
-Data in this folder is used for training the model from scratch. The data in this folder will be split into training and validation sets in x, y %
+Data in folder `Data/Training` is used for training the model from scratch. Available data will be split into training and validation sets in x, y %
 To prepare the data for training, copy raw mrc files in `Data/Traning/MRCs` and ground truth labels in `Data/Traning/Labels`.
 
 #### Data Requirements & Naming Convention
