@@ -28,13 +28,12 @@ To prepare the data for training, copy raw mrc files in `Data/Traning/MRCs` and 
 - Raw MRC filename and its corresponding label filename **must be same** for correct mapping
 - Label encoding must follow:
   - `0` → background
+  - `1` → cytoplasm label (as done in ([ACSeg](https://biomedisa.info/gallery/#)))
   - `2` → nucleus
   - `5` → mitochondria
 - Each dimension of the image should be less than 704.
 
-
-#### Steps:
-##### Preprocessing: 
+#### Preprocessing: 
 Here all the raw mrcs and masks are split in train and validation folders inside `Data/Training folder` (i.e. new folder are created `mrc_train`, `mrc_val`, `mask_train` and `mask_val`). Each mrc and mask undergoes padding, to ensure the image size matches the model's input requirement. Each raw mrc undergoes preprocessing as proposed in MitoXRNet paper. Further it creates 3D slices for train and validation dataset in folder `Data/Training/slices`.
 
 Run preprocessing with default 80/20 train–validation split
@@ -46,7 +45,7 @@ Optionally, change the train/validation split ratio
 python codes/preprocessing.py --split_ratio 0.7
 ```
 
-##### Training:
+#### Training:
 Train using default configuration (Shallow U-Net: 1.4M parameters and Combined loss: BCE + Robust Dice)
 ```
 python codes/train.py
@@ -68,12 +67,13 @@ Training execution will create logs and save trained model weights in the `Outpu
 
 ## Prediction and Evaluation
 
-`evaluate.py` runs the complete MitoXRNet inference pipeline, including preprocessing, slice-wise prediction, and class-wise evaluation.  
+`evaluate.py` runs the complete MitoXRNet inference pipeline, including preprocessing, slice-wise prediction, and class-wise evaluation on test/prediction data.  
 It supports flexible execution modes such as **preprocessing only**, **prediction only**, **evaluation only**, or the full pipeline.  
 Segmentation performance is reported using IoU, Dice, Precision, and Recall for both nucleus and mitochondria.
 
 #### Data preparation:
-Keep the raw mrcs for prediction in `Data/Prediction/MRCs` folder and corresponding ground truth labels in `Data/Prediction/Labels` folder.
+Keep the raw mrcs for prediction in `Data/Prediction/MRCs` folder and corresponding ground truth labels in `Data/Prediction/Labels` folder. Ground truth labels are required for computing prediction accuray. It can be omitted if not available.
+
 #### Data Requirements & Naming Convention
 
 - MitoXRNet requires that **each raw MRC contains a single masked cell**, e.g. ACSeg ([Link](https://biomedisa.info/gallery/#)) can be used.
