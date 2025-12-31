@@ -22,13 +22,13 @@ Data in folder `Data/Training` is used for training the model from scratch. Avai
 To prepare the data for training, copy raw mrc files in `Data/Traning/MRCs` and ground truth labels in `Data/Traning/Labels`.
 
 #### Data Requirements & Naming Convention:
-- MitoXRNet requires that **raw MRC is already segmented for cell membrane/cytosolic region**, e.g. using ACSeg ([Link](https://biomedisa.info/gallery/#)).
+- MitoXRNet requires that **raw MRC is already segmented for cell membrane/cytosolic region**, e.g. using [ACSeg](https://biomedisa.info/gallery/#).
 - Raw MRC and corresponding label must have **identical shape**, e.g. both raw mrc and corresponding label has shape `(425, 430, 410)`. Each independent raw mrc can be of different size.
 - Both raw images and labels must be in **`.mrc` format**
 - Raw MRC filename and its corresponding label filename **must be same** for correct mapping
 - Label encoding must follow:
   - `0` → background
-  - `1` → cytoplasm label (as done in ([ACSeg](https://biomedisa.info/gallery/#)))
+  - `1` → cytoplasm label (as done in [ACSeg](https://biomedisa.info/gallery/#))
   - `2` → nucleus
   - `5` → mitochondria
 - Each dimension of the image should be less than 704.
@@ -72,37 +72,13 @@ It supports flexible execution modes such as **preprocessing only**, **predictio
 Segmentation performance is reported using IoU, Dice, Precision, and Recall for both nucleus and mitochondria.
 
 #### Data preparation:
-Keep the raw mrcs for prediction in `Data/Prediction/MRCs` folder and corresponding ground truth labels in `Data/Prediction/Labels` folder. Ground truth labels are required for computing prediction accuray. It can be omitted if not available.
+Keep the raw mrcs for prediction in `Data/Prediction/MRCs` folder and corresponding ground truth labels in `Data/Prediction/Labels` folder. In ground truth label atleast cytoplasm label (=1) is required for cropping the raw mrc for prediction. Nucleus and mitochondria labels can be omitted if not available.
 
 #### Data Requirements & Naming Convention
+Follow same requirements and naming convection as mention in `Training from scratch` section
 
-- MitoXRNet requires that **each raw MRC contains a single masked cell**, e.g. ACSeg ([Link](https://biomedisa.info/gallery/#)) can be used.
-
-- Raw MRC and corresponding label must have **identical shape**  
-  `(z, y, x) = (z, y, x)`
-
-- Both raw images and labels must be in **`.mrc` format**
-
-- Raw MRC filename and its corresponding label filename **must be identical** for correct mapping
-
-- Filenames must follow the required format:  
-  `<EXPERIMENT_METADATA>_<CELLID>_pre_rec.mrc`
-
-  **CELLID examples:** `1111_13`, `1128_1-2`  
-  **Full filename example:**  
-  `KLW_PBC_INS1e_Ex-4_5min_1111_13_pre_rec.mrc`
-
-- Label encoding must follow:
-  - `0` → background  
-  - `1` → cytoplasm  
-  - `2` → nucleus  
-  - `5` → mitochondria  
-
-- Each 3D image dimension must satisfy:  
-  **size ≤ `704` along every axis**
-
+Full evaluation pipeline (default)
 ```
-# Full evaluation pipeline (default)
 python codes/evaluate.py
 ```
 ### Tag & Keyword Summary
