@@ -18,7 +18,7 @@ For directly predicting using the pretrained models, skip training instructions 
 
 ## Training from Scratch
 #### Data preparation:
-Data in folder `Data/Training` is used for training the model from scratch. Available data will be split into training and validation sets in approximately 95:5 ratio. In paper, 52 cells were split into 49 training and 3 validation cells. Additionally 3 cells were kept for Prediction.
+Data in folder `Data/Training` is used for training the model from scratch. Available data will be split into training and validation sets. In paper, 52 cells were split into 49 training and 3 validation cells. Additionally 3 cells were kept for Prediction.
 To prepare the data for training, copy raw mrc files in `Data/Traning/MRCs` and ground truth labels in `Data/Traning/Labels`.
 
 #### Data Requirements & Naming Convention:
@@ -47,23 +47,24 @@ python codes/preprocessing.py --split_ratio 0.7
 ```
 
 ##### Training:
+Train using default configuration (Shallow U-Net: 1.4M parameters and Combined loss: BCE + Robust Dice)
 ```
-# Train using default configuration (UNet + CombinedLoss)
 python codes/train.py
-
-# Train using UNetDeep (larger network)
+```
+Train using UNetDeep (Deeper network: ~22M parameters)
+```
 python codes/train.py --model_tag 1
-
-# Train using BCEWithLogitsLoss instead of CombinedLoss
+```
+Train using only BCE loss
+```
 python codes/train.py --loss_tag 0
 ```
-- Default command trains **UNet** with **CombinedLoss**
+- default command trains **UNet** with **CombinedLoss**
 - `--model_tag 1` → trains **UNetDeep (larger network)**
 - `--loss_tag 0` → uses **BCEWithLogitsLoss**
 - `--model_tag 1 --loss_tag 0` → trains **UNetDeep** with **BCEWithLogitsLoss**
 
-Training execution will create logs and save trained model weights in the `Output/Trained_Weights/` folder.
-Early stopping has been intentially removed, so stop the training based on val and train error/accuracy.
+Training execution will create logs and save trained model weights in the `Outputs/Trained_Weights` folder. Early stopping has been intentially removed, so stop the training based on val and train error/accuracy.
 
 ## Prediction and Evaluation
 
