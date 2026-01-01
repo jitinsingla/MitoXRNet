@@ -370,7 +370,7 @@ def main():
         help="Name of the trained model checkpoint (without extension)"
     )
     parser.add_argument(
-        "--only_prediction",
+        "--only_predict",
         action="store_true",
         help="If set, only run prediction without training"
     )
@@ -379,7 +379,7 @@ def main():
     preprocessing()
     print()
     print("\n---------- Preprocessing Completed ----------")
-    if args.only_prediction:
+    if args.only_predict:
         print("\n---------- Starting Only Prediction ----------\n")
         prediction(
             pretrained=args.pretrained,
