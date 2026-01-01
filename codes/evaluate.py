@@ -330,16 +330,16 @@ def metrics_eval(threshold=0.6):
             "threshold": threshold,
             "mean": {
                 "nucleus": {
-                    "iou": sums["nuc_iou"]/n,
-                    "dice": sums["nuc_dice"]/n,
-                    "precision": sums["nuc_prec"]/n,
-                    "recall": sums["nuc_rec"]/n,
+                    "iou": pct(sums['nuc_iou']/n),
+                    "dice": pct(sums['nuc_dice']/n),
+                    "precision": pct(sums['nuc_prec']/n),
+                    "recall": pct(sums['nuc_rec']/n),
                 },
                 "mitochondria": {
-                    "iou": sums["mito_iou"]/n,
-                    "dice": sums["mito_dice"]/n,
-                    "precision": sums["mito_prec"]/n,
-                    "recall": sums["mito_rec"]/n,
+                    "iou": pct(sums['mito_iou']/n),
+                    "dice": pct(sums['mito_dice']/n),
+                    "precision": pct(sums['mito_prec']/n),
+                    "recall": pct(sums['mito_rec']/n),
                 }
             },
             "results": results
