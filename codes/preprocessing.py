@@ -73,7 +73,7 @@ def preprocessing(split_ratio = 0.8):
             if filename.endswith('.mrc'):  
                 image_path = os.path.join(path_to_subfolder, filename)
 
-                image = read_mrc(image_path)#.get()
+                image = read_mrc(image_path)
 
                 img_name, _ = os.path.splitext(filename)
 
