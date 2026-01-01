@@ -90,7 +90,7 @@ python codes/evaluate.py
 |------------|-------------|
 | **(default)** | Runs **preprocessing → prediction → evaluation** using **UNet**, **user-trained weights**, model_name = `Trained_model_UNet_CombinedLoss`, threshold = `0.6` |
 | `--pretrained 0` | Use **user-trained weights** from `output/Trained_Weights/` |
-| `--model_name` | Used to select one of your trained models from `output/Trained_Weights/` |
+| `--model_name` | Used to select one of the user trained models from `output/Trained_Weights/` |
 | `--pretrained 1` | Use **pretrained UNet with Combined loss** weights from paper `output/Pretrained_Weights/`|
 | `--pretrained 2` | Use **pretrained UNetDeep with Combined loss** weights from paper `output/Pretrained_Weights/` |
 | `--threshold <value>` | Set prediction & evaluation threshold (default = `0.6`) |
