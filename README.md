@@ -90,7 +90,7 @@ python codes/evaluate.py
 | `--pretrained 1` | Use **pretrained UNet** weights from paper `output/Pretrained_Weights/`|
 | `--pretrained 2` | Use **pretrained UNetDeep** weights from paper `output/Pretrained_Weights/` |
 | `--threshold <value>` | Set prediction & evaluation threshold (default = `0.6`) |
-| `--model_name` | Run **only preprocessing** |
+| `--model_name` | **used to select base model architecture** |
 
 For evaluaton on **user-trained weights**, correct `--model_name` should be provided from the `output/Trained_Weights/`
 
