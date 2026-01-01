@@ -10,9 +10,9 @@ def preprocessing(split_ratio = 0.8):
     print()
     print("-----Splitting Dataset into train and Validation Sets-----")    
     print()
-    mrc_folder = '../Data/Training/MRCs'
-    mask_folder = '../Data/Training/Labels'
-    output_folder = "../Data/Training/Preprocessed"
+    mrc_folder = './Data/Training/MRCs'
+    mask_folder = './Data/Training/Labels'
+    output_folder = "./Data/Training/Preprocessed"
     split_dataset(mrc_folder, mask_folder, output_folder,split_ratio = split_ratio)
     print()
     folders = {
@@ -66,8 +66,8 @@ def preprocessing(split_ratio = 0.8):
     print('---------Slicing Started---------', flush=True)
     print()
     for i in folders:    
-        path_to_subfolder = os.path.join('../Data/Training' , i)
-        output_folder = os.path.join('../Data/Training/Slices/' , i.split("_preprocessed")[0]+'_slices')
+        path_to_subfolder = os.path.join('./Data/Training' , i)
+        output_folder = os.path.join('./Data/Training/Slices/' , i.split("_preprocessed")[0]+'_slices')
         os.makedirs(output_folder,exist_ok=True)
         for filename in os.listdir(path_to_subfolder):
             if filename.endswith('.mrc'):  
