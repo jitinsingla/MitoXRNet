@@ -18,8 +18,7 @@ def anti_padding(img, target_size):
     if any(img.shape[i] < target_size[i] for i in range(3)):
         raise ValueError("Target size must be smaller than or equal to the input image size for anti-padding.")
     crop_slices = [slice((img.shape[i] - target_size[i]) // 2, (img.shape[i] - target_size[i]) // 2 + target_size[i]) for i in range(3)]
-    cropped_img = img[crop_slices[0], crop_slices[1], crop_slices[2]]
-    
+    cropped_img = img[crop_slices[0], crop_slices[1], crop_slices[2]]    
     return cropped_img
 
 def mask_crop(image, labels):
@@ -53,26 +52,20 @@ def save_train_val_loss_plot(
         "Train and validation loss lists must have same length"
 
     os.makedirs(save_dir, exist_ok=True)
-
     epochs = range(1, len(train_losses) + 1)
 
     plt.figure(figsize=(8, 5))
-
     plt.plot(epochs, train_losses, label="Train Loss", linewidth=2)
     plt.plot(epochs, val_losses, label="Validation Loss", linewidth=2)
-
     plt.xlabel("Epochs")
     plt.ylabel("Loss")
     plt.title("Training vs Validation Loss")
-
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-
     save_path = os.path.join(save_dir, filename)
     plt.savefig(save_path, dpi=300)   
     plt.close()                       
-
     print(f"-----Loss plot saved at: {save_path}-----")
 
 def create_and_save_slices(img, img_name, output_folder):
@@ -106,7 +99,7 @@ def read_mrc(filename, tag = "Numpy"):
     byte_pattern='=' + 'l'*num_ints   #'=' required to get machine independent standard size
     dim=struct.unpack(byte_pattern, head1)[:3][::-1]
     imagetype=struct.unpack(byte_pattern,head1)[3]  #0: 8-bit signed, 1:16-bit signed, 2: 32-bit float, 6: unsigned 16-bit (non-std)
-    #print("Imagetype = {}".format(imagetype ))
+    
     if (imagetype == 0):
         imtype='b'
     elif (imagetype ==1):
@@ -122,8 +115,7 @@ def read_mrc(filename, tag = "Numpy"):
     if tag == "Cupy":
         image_data=cp.fromfile(file=input_image,dtype=imtype,count=num_voxels).reshape(dim)
     else:
-        image_data=np.fromfile(file=input_image,dtype=imtype,count=num_voxels).reshape(dim)
-        
+        image_data=np.fromfile(file=input_image,dtype=imtype,count=num_voxels).reshape(dim)    
     input_image.close()
     return image_data
 
@@ -149,22 +141,17 @@ def split_dataset(mrc_folder, mask_folder, output_folder, split_ratio=0.8, seed=
 
     mrc_files = glob.glob(os.path.join(mrc_folder, "*.mrc"))
     mask_files = glob.glob(os.path.join(mask_folder, "*.mrc"))
-
     mrc_dict = {os.path.splitext(os.path.basename(f))[0]: f for f in mrc_files}
     mask_dict = {os.path.splitext(os.path.basename(f))[0]: f for f in mask_files}
-
     common_keys = sorted(set(mrc_dict) & set(mask_dict))
     assert len(common_keys) >= 2, "Need at least 2 samples to split train/val!"
 
     pairs = [(mrc_dict[k], mask_dict[k]) for k in common_keys]
     random.shuffle(pairs)
-
     total = len(pairs)
-
     # --- SAFE split ---
     train_end = max(1, int(total * split_ratio))
     train_end = min(train_end, total - 1)
-
     splits = {
         "train": pairs[:train_end],
         "val": pairs[train_end:]
@@ -175,15 +162,12 @@ def split_dataset(mrc_folder, mask_folder, output_folder, split_ratio=0.8, seed=
         mask_out = os.path.join(output_folder, f"mask_{split_name}_preprocessed")
         os.makedirs(mrc_out, exist_ok=True)
         os.makedirs(mask_out, exist_ok=True)
-
         for mrc_file, mask_file in split_pairs:
             shutil.copy2(mrc_file, os.path.join(mrc_out, os.path.basename(mrc_file)))
             shutil.copy2(mask_file, os.path.join(mask_out, os.path.basename(mask_file)))
-
     print(f"Dataset split completed → {output_folder}")
     print(f"Train: {train_end}, Val: {total - train_end}")
 
-    
 def IOU_and_DICE(prediction , Ground_Truth):
     intersection = np.logical_and(prediction,Ground_Truth)
     union = np.logical_or(prediction,Ground_Truth)
