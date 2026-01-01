@@ -183,9 +183,10 @@ def Initialization(model_tag = 0, loss_tag=0, epochs = 60):
 def train(loss_fn, optimizer, model, train_loader, val_loader, device, model_name, loss_name, epochs):
     
     plot_save_dir = "../output/Plots"
-    checkpoint_path = f"../output/Trained_Weights/Trained_model_{model_name}_{loss_name}"
+    trainedWeightDir = "../output/Trained_Weights/"
+    checkpoint_path = os.path.join(trainedWeightDir, f"Trained_model_{model_name}_{loss_name}")
     os.makedirs(plot_save_dir, exist_ok = True)
-    os.makedirs('../output/Trained_Weights/', exist_ok = True)
+    os.makedirs(trainedWeightDir, exist_ok = True)
     progress_path = checkpoint_path + "_progress.pth"
     start_epoch = 0
     best_valid_loss = float('inf')
