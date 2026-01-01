@@ -72,7 +72,7 @@ It supports flexible execution modes such as **preprocessing only**, **predictio
 Segmentation performance is reported using IoU, Dice, Precision, and Recall for both nucleus and mitochondria.
 
 #### Data preparation:
-Keep the raw mrcs for prediction in `Data/Prediction/MRCs` folder and corresponding ground truth labels in `Data/Prediction/Labels` folder. In ground truth label atleast cytoplasm label (=1) is required for cropping the raw mrc for prediction. Nucleus and mitochondria labels can be omitted if not available.
+Keep the raw mrcs for prediction in `Data/Prediction/MRCs` folder and corresponding ground truth labels in `Data/Prediction/Labels` folder. In ground truth label atleast cytoplasm label `=1` is required for cropping the raw mrc for prediction. Nucleus and mitochondria labels can be omitted if not available.
 
 #### Data Requirements & Naming Convention
 Follow same requirements and naming convection as mention in `Training from scratch` section
