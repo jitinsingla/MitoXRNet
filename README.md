@@ -54,16 +54,16 @@ Train using UNetDeep (Deeper network: ~22M parameters)
 ```
 python codes/train.py --model_tag 1
 ```
-Train using only BCE loss
+Train using only CombinedLoss: Robust Dice+BCE Loss
 ```
 python codes/train.py --loss_tag 0
 ```
 - default command trains **UNet** with **CombinedLoss**
 - `--model_tag 1` → trains **UNetDeep (larger network)**
-- `--loss_tag 0` → uses **BCEWithLogitsLoss**
-- `--model_tag 1 --loss_tag 0` → trains **UNetDeep** with **BCEWithLogitsLoss**
+- `--loss_tag 1` → uses **BCEWithLogitsLoss**
+- `--model_tag 1 --loss_tag 1` → trains **UNetDeep** with **BCEWithLogitsLoss**
 
-Training execution will create logs and save trained model weights in the `Outputs/Trained_Weights` folder. Early stopping has been intentially removed, so stop the training based on val and train error/accuracy.
+Training execution will create logs and save trained model weights in the `output/Trained_Weights` folder. Early stopping has been intentially removed, so stop the training based on val and train error/accuracy.
 
 ## Prediction and Evaluation
 
@@ -85,18 +85,14 @@ python codes/evaluate.py
 
 | Flag / Mode | Description |
 |------------|-------------|
-| **(default)** | Runs **preprocessing → prediction → evaluation** using **UNet**, **user-trained weights**, threshold = `0.6` |
-| `--model_tag 1` | Use **UNetDeep** architecture (larger network) |
+| **(default)** | Runs **preprocessing → prediction → evaluation** using **UNet**, **user-trained weights**, model_name = `Trained_model_UNet_CombinedLoss`, threshold = `0.6` |
 | `--pretrained 0` | Use **user-trained weights** from `Output/Trained_Weights/` |
 | `--pretrained 1` | Use **pretrained UNet** weights from paper `Output/Pretrained_Weights/`|
 | `--pretrained 2` | Use **pretrained UNetDeep** weights from paper `Output/Pretrained_Weights/` |
 | `--threshold <value>` | Set prediction & evaluation threshold (default = `0.6`) |
-| `--only_preprocessing` | Run **only preprocessing** |
-| `--skip_preprocessing` | Skip preprocessing, run **prediction + evaluation** |
-| `--only_prediction` | Run **only prediction** |
-| `--only_metrics` | Run **only evaluation** (predictions must exist) |
+| `--model_name` | Run **only preprocessing** |
 
-`--only_prediction` and `--only_metrics` cannot be used together
+For evaluaton on **user-trained weights**, correct `--model_name` should be provided from the `Output/Trained_Weights/`
 
 The above mentioned code performs the following steps:
 1. Preprocessing  `Data/Prediction/Processed_MRCs`
@@ -106,5 +102,5 @@ The above mentioned code performs the following steps:
 5. Merge slices
 
 Final predicted labels are saved in `Data/Prediction/PredictedLabels` **(at original ground-truth label sizes)**.<br>
-Evaluation metrics (IoU, Dice, Precision, Recall) are displayed in the terminal and saved as a JSON file in `Outputs/Evaluation_results/`.
+Evaluation metrics (IoU, Dice, Precision, Recall) are displayed in the terminal and saved as a JSON file in `output/Evaluation_results/`.
 
