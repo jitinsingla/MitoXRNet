@@ -10,7 +10,7 @@ def normalisation(img):
     """
     Normalization of input mrc files
     Args:
-        img(numpy array): Input image
+        img (numpy array): input image
     """
     norm_img = (img-img.min())/(img.max()-img.min())
     return norm_img
@@ -19,8 +19,8 @@ def center_padding(img, target_size):
     """
     Equally padding of 0's from all sides of the given image. 
     Args:
-        img(numpy array): Input image to be padded
-        target_size(tuple): Center pad the image to target size
+        img (numpy array): input image for padding
+        target_size (tuple): center pad the image to target size
     """
     pad_widths = [(max((target_size[i] - img.shape[i]) // 2, 0), max((target_size[i] - img.shape[i] + 1) // 2, 0)) for i in range(3)]
     pad_img = np.pad(img, pad_widths)
@@ -30,8 +30,8 @@ def anti_padding(img, target_size):
     """
     Remove padding equally from all sides of the given image based on the target size. 
     Args:
-        img(numpy array): Input image to be padded
-        target_size(tuple): Crop the image to target size.
+        img (numpy array): input image for cropping
+        target_size (tuple): crop the image to target size.
     """
     if any(img.shape[i] < target_size[i] for i in range(3)):
         raise ValueError("Target size must be smaller than or equal to the input image size for anti-padding.")
@@ -43,8 +43,8 @@ def mask_crop(image, labels):
     """
     Crop out the raw mrc image area corresponding to the given label.
     Args:
-        image(numpy array): Raw mrc 
-        labels(numpy array): Given Label
+        image (numpy array): raw mrc image 
+        labels (numpy array): ground truth Label
     """
     cropped_mrc = np.where(labels>0, image, 0)
     return cropped_mrc
