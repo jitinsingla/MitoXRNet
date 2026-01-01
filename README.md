@@ -98,12 +98,10 @@ python codes/evaluate.py
 For evaluaton on **user-trained weights**, correct `--model_name` should be provided from the `output/Trained_Weights/`
 
 The above mentioned code performs the following steps:
-1. Preprocessing  `Data/Prediction/Processed_MRCs`
-2. Slicing  `Data/Prediction/MRC_predict_slices`
+1. Preprocessing  `Data/Prediction/Preprocessed`
+2. Slicing  `Data/Prediction/Slices`
 3. Model load
-4. Predict on each slice  `Data/Prediction/MRC_prediction_slices_temp`
-5. Merge slices
-
-Final predicted labels are saved in `Data/Prediction/PredictedLabels` **(at original ground-truth label sizes)**.<br>
-Evaluation metrics (IoU, Dice, Precision, Recall) are displayed in the terminal and saved as a JSON file in `output/Evaluation_results/`.
-
+4. Predict on each slice  `Data/Prediction/prediction_slices_temp`
+5. Merged labels probabilistic: 'Data/Prediction/NucleusProbabilisticPrediction' and 'Data/Prediction/MitoProbabilisticPrediction'
+6. Final predicted labels are saved in `Data/Prediction/PredictedLabels` **(at original ground-truth label sizes)**.
+7. Evaluation metrics (IoU, Dice, Precision, Recall) are displayed in the terminal and saved as a JSON file in `output/Evaluation_results/`.
