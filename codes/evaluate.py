@@ -369,11 +369,27 @@ def main():
         default="Trained_model_UNet_CombinedLoss",
         help="Name of the trained model checkpoint (without extension)"
     )
+    parser.add_argument(
+        "--only_prediction",
+        action="store_true",
+        help="If set, only run prediction without training"
+    )
     args = parser.parse_args()
     
     preprocessing()
     print()
     print("\n---------- Preprocessing Completed ----------")
+    if args.only_prediction:
+        print("\n---------- Starting Only Prediction ----------\n")
+        prediction(
+            pretrained=args.pretrained,
+            Model_name=args.model_name,
+            Threshold=args.threshold
+        )
+        print("\n---------- Prediction Completed ----------\n")
+        return
+        
+    
     print("\n---------- Starting Prediction ----------\n")
     prediction(
         pretrained=args.pretrained,
