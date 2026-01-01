@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from MitoXRNet import UNet,UNetDeep
+from mitoXRNet import UNet,UNetDeep
 from loss import CombinedLoss
 import torch.optim as optim
 from slice_loader import SliceLoader
