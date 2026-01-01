@@ -5,16 +5,34 @@ from patchify import patchify, unpatchify
 from scipy import ndimage
 import struct
 import matplotlib.pyplot as plt
+
 def normalisation(img):
+    """
+    Normalization of input mrc files
+    Args:
+        img(numpy array): Input image
+    """
     norm_img = (img-img.min())/(img.max()-img.min())
     return norm_img
 
 def center_padding(img, target_size):
+    """
+    Equally padding of 0's from all sides of the given image. 
+    Args:
+        img(numpy array): Input image to be padded
+        target_size(tuple): Center pad the image to target size
+    """
     pad_widths = [(max((target_size[i] - img.shape[i]) // 2, 0), max((target_size[i] - img.shape[i] + 1) // 2, 0)) for i in range(3)]
     pad_img = np.pad(img, pad_widths)
     return pad_img
 
 def anti_padding(img, target_size):
+    """
+    Remove padding equally from all sides of the given image based on the target size. 
+    Args:
+        img(numpy array): Input image to be padded
+        target_size(tuple): Crop the image to target size.
+    """
     if any(img.shape[i] < target_size[i] for i in range(3)):
         raise ValueError("Target size must be smaller than or equal to the input image size for anti-padding.")
     crop_slices = [slice((img.shape[i] - target_size[i]) // 2, (img.shape[i] - target_size[i]) // 2 + target_size[i]) for i in range(3)]
@@ -22,10 +40,19 @@ def anti_padding(img, target_size):
     return cropped_img
 
 def mask_crop(image, labels):
+    """
+    Crop out the raw mrc image area corresponding to the given label.
+    Args:
+        image(numpy array): Raw mrc 
+        labels(numpy array): Given Label
+    """
     cropped_mrc = np.where(labels>0, image, 0)
     return cropped_mrc
 
 def epoch_time(start_time, end_time):
+    """
+    Calculates the minutes, seconds per epoch
+    """
     elapsed_time = end_time - start_time
     elapsed_mins = int(elapsed_time / 60)
     elapsed_secs = int(elapsed_time - (elapsed_mins * 60))
@@ -46,7 +73,6 @@ def save_train_val_loss_plot(
         save_dir (str): directory where plot will be saved
         filename (str): name of the image file
     """
-
     # ---- safety checks ----
     assert len(train_losses) == len(val_losses), \
         "Train and validation loss lists must have same length"
@@ -69,6 +95,13 @@ def save_train_val_loss_plot(
     print(f"-----Loss plot saved at: {save_path}-----")
 
 def create_and_save_slices(img, img_name, output_folder):
+    """
+    Creates 21 slices along each z,y,x axis and save the slices to output folder.
+    Args:
+        img (numpy array): image given for slicing
+        img_name (str): image name of given image.
+        output_folder (str): path to the saving folder.
+    """
     patches_z = patchify(img, (64,704,704), step=(32,32,32))
     patches_z = patches_z.squeeze((1,2))
     tmp = np.rot90(img, axes=(0,1))
@@ -86,7 +119,12 @@ def create_and_save_slices(img, img_name, output_folder):
             write_mrc(patch_path, patch)
     print(f'Slices created for {img_name} at {output_folder}')
 
-def read_mrc(filename, tag = "Numpy"):
+def read_mrc(filename):
+    """
+    Custom function to read '.mrc' files.
+    Args:
+        filename (str): full path of the file to read
+    """
     filename = str(filename)
     input_image=open(filename,'rb')
     num_ints=56
@@ -112,14 +150,16 @@ def read_mrc(filename, tag = "Numpy"):
         type='unknown'   #should put a fail here
         
     num_voxels=dim[0]*dim[1]*dim[2]
-    if tag == "Cupy":
-        image_data=cp.fromfile(file=input_image,dtype=imtype,count=num_voxels).reshape(dim)
-    else:
-        image_data=np.fromfile(file=input_image,dtype=imtype,count=num_voxels).reshape(dim)    
+    image_data=np.fromfile(file=input_image,dtype=imtype,count=num_voxels).reshape(dim)    
     input_image.close()
     return image_data
 
 def write_mrc(filename, im, num_ints=56, sizeof_int=4, num_chars=800):
+    """
+    Custom function to write in '.mrc' format.
+    Args:
+        filename (str): full path of the file to write.
+    """
     filename = str(filename)
     type_modes = {
         'b': 0,
@@ -137,6 +177,14 @@ def write_mrc(filename, im, num_ints=56, sizeof_int=4, num_chars=800):
         f.write(im.tobytes())
         
 def split_dataset(mrc_folder, mask_folder, output_folder, split_ratio=0.8, seed=42):
+    """
+    This function splits the given data into train, validation sets.
+    Args:
+        mrc_folder (str): path to the mrc folder
+        mask_folder (str): path to the mask folder
+        output_folder (str): path to the saving folder
+        split_ratio (float): ratio in which train/val data will split
+    """
     random.seed(seed)
 
     mrc_files = glob.glob(os.path.join(mrc_folder, "*.mrc"))
@@ -169,6 +217,12 @@ def split_dataset(mrc_folder, mask_folder, output_folder, split_ratio=0.8, seed=
     print(f"Train: {train_end}, Val: {total - train_end}")
 
 def IOU_and_DICE(prediction , Ground_Truth):
+    """
+    Calculates IOU and Dice scores.
+    Args:
+        prediction (numpy array): prediction image must contain one class only (desired class for evaluation)
+        Ground_Truth (numpy array): Corresponding Ground Truth Label image, contain one class only (desired class for evaluation)
+    """
     intersection = np.logical_and(prediction,Ground_Truth)
     union = np.logical_or(prediction,Ground_Truth)
     IOU = np.sum(intersection)/np.sum(union)
@@ -176,6 +230,12 @@ def IOU_and_DICE(prediction , Ground_Truth):
     return IOU , DICE
                     
 def Precision_recall_f1_score(prediction, Ground_Truth):
+    """
+    Calculates Precision, Recall and F1 scores.
+    Args:
+        prediction (numpy array): prediction image must contain one class only (desired class for evaluation)
+        Ground_Truth (numpy array): Corresponding Ground Truth Label image, contain one class only (desired class for evaluation)
+    """
     true_positive = np.sum(np.logical_and(prediction, Ground_Truth))
     false_positive = np.sum(np.logical_and(prediction, np.logical_not(Ground_Truth)))
     false_negative = np.sum(np.logical_and(np.logical_not(prediction), Ground_Truth))
@@ -185,6 +245,11 @@ def Precision_recall_f1_score(prediction, Ground_Truth):
     return precision, recall, f1_score            
 
 def hpf_sobel(image):
+    """
+    Take image input to calculate graients along z,y,x axis.
+    Args:
+        image (numpy image): input image
+    """
     gradient_x = ndimage.sobel(image, axis=1, mode='constant')
     gradient_y = ndimage.sobel(image, axis=0, mode='constant')
     gradient_z = ndimage.sobel(image, axis=2, mode='constant')
@@ -193,6 +258,11 @@ def hpf_sobel(image):
     return sobel_magnitude
 
 def ves_mito_separator(img,sigma=2):
+    """
+    Performs MitoXRNet preprocessing.
+    Args:
+        image (numpy image): input raw mrc image.
+    """
     out = img + ndimage.gaussian_filter(img, sigma)
     hpf_out = hpf_sobel(out)
     out = img + 0.75*hpf_out + 0.25*hpf_out*hpf_out
