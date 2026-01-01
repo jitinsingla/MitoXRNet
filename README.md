@@ -93,7 +93,7 @@ python codes/evaluate.py
 | `--model_name` | Used to select one of the user trained models from `output/Trained_Weights/` |
 | `--pretrained 1` | Use **pretrained UNet with Combined loss** weights from paper `output/Pretrained_Weights/`|
 | `--pretrained 2` | Use **pretrained UNetDeep with Combined loss** weights from paper `output/Pretrained_Weights/` |
-| `--only_prediction` | Performs **Preprocessing** and **Prediction** only |
+| `--only_prediction` | Only **Preprocessing** and **Prediction** |
 | `--threshold <value>` | Set prediction & evaluation threshold (default = `0.6`) |
 
 For evaluaton on **user-trained weights**, correct `--model_name` should be provided from the `output/Trained_Weights/`
