@@ -22,7 +22,7 @@ Data in folder `Data/Training` is used for training the model from scratch. Avai
 To prepare the data for training, copy raw mrc files in `Data/Traning/MRCs` and ground truth labels in `Data/Traning/Labels`.
 
 #### Data Requirements & Naming Convention:
-- MitoXRNet requires that **raw MRC is already segmented for cell membrane/cytosolic region**, e.g. using [ACSeg](https://biomedisa.info/gallery/#).
+- MitoXRNet requires that **raw MRC is already segmented for cell membrane/cytosolic region**, e.g. using [ACSeg](https://biomedisa.info/gallery/#) (Cytoplasm).
 - Raw MRC and corresponding label must have **identical shape**, e.g. both raw mrc and corresponding label has shape `(425, 430, 410)`. Each independent raw mrc can be of different size.
 - Both raw images and labels must be in **`.mrc` format**
 - Raw MRC filename and its corresponding label filename **must be same** for correct mapping
