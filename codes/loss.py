@@ -13,11 +13,9 @@ class RobustDiceLoss(nn.Module):
         targets: shape (N, 2, H, W) – binary masks
         """
         preds = torch.sigmoid(preds)  # Apply sigmoid per channel
-
         intersection = torch.sum(preds * targets, dim=(0, 2, 3,4))
         preds_sq = torch.sum(preds ** 2, dim=(0, 2, 3,4))
         targets_sq = torch.sum(targets ** 2, dim=(0, 2, 3,4))
-
         dice = (2. * intersection + self.epsilon) / (preds_sq + targets_sq + self.epsilon)
         dice_loss = 1. - dice.mean()
         return dice_loss
