@@ -4,7 +4,6 @@ import argparse
 from patchify import patchify
 from utils import *
 
-
 def preprocessing(split_ratio = 0.8):
     
     ##--- Use absolute paths if these paths not working----##
@@ -22,7 +21,6 @@ def preprocessing(split_ratio = 0.8):
     }
 
     pairs = []
-
     for name in folders:
         if name.startswith("mrc_"):
             counterpart = name.replace("mrc_", "mask_", 1)
@@ -39,10 +37,7 @@ def preprocessing(split_ratio = 0.8):
 
         img_name_list = sorted(glob.glob(os.path.join(output_folder, mrc, "*.mrc")))
         mask_name_list =  sorted(glob.glob(os.path.join(output_folder, mask, "*.mrc")))
-
-        
         for img_name,mask_name in zip(img_name_list, mask_name_list):
-
             img = read_mrc(img_name)
             mask = read_mrc(mask_name)
             assert img.shape == mask.shape, "Mask and image don't match."
@@ -74,7 +69,6 @@ def preprocessing(split_ratio = 0.8):
         path_to_subfolder = os.path.join('../Data/Training' , i)
         output_folder = os.path.join('../Data/Slices/' , i.split("_preprocessed")[0]+'_Slices')
         os.makedirs(output_folder,exist_ok=True)
-
         for filename in os.listdir(path_to_subfolder):
             if filename.endswith('.mrc'):  
                 image_path = os.path.join(path_to_subfolder, filename)
@@ -89,19 +83,16 @@ def preprocessing(split_ratio = 0.8):
     print()                             
     print('---------Slicing Completed---------')
                                  
-                                 
 def main():
     parser = argparse.ArgumentParser(
         description="Preprocessing for MitoXRNet (train/val split, padding, slicing)"
     )
-
     parser.add_argument(
         "--split_ratio",
         type=float,
         default=0.8,
         help="Train/Validation split ratio (default = 0.8)"
     )
-
     args = parser.parse_args()
 
     preprocessing(split_ratio=args.split_ratio)
