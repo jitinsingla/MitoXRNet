@@ -172,8 +172,8 @@ def Initialization(model_tag = 0, loss_tag=0, epochs = 60):
     model = nn.DataParallel(model)  
     model = model.to(device)
     # Load train and val datasets using SliceLoader
-    train_dataset = SliceLoader("../Data/Slices/", "mrc_train_Slices", "mask_train_Slices") 
-    val_dataset = SliceLoader("../Data/Slices/", "mask_val_Slices", "mask_val_Slices")
+    train_dataset = SliceLoader("./Data/Slices/", "mrc_train_Slices", "mask_train_Slices") 
+    val_dataset = SliceLoader("./Data/Slices/", "mask_val_Slices", "mask_val_Slices")
     # Define DataLoader for training and validating
     train_loader = DataLoader(train_dataset, batch_size=batchSize, shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=batchSize, shuffle=False)
@@ -182,8 +182,8 @@ def Initialization(model_tag = 0, loss_tag=0, epochs = 60):
 
 def train(loss_fn, optimizer, model, train_loader, val_loader, device, model_name, loss_name, epochs):
     
-    plot_save_dir = "../output/Plots"
-    trainedWeightDir = "../output/Trained_Weights/"
+    plot_save_dir = "./output/Plots"
+    trainedWeightDir = "./output/Trained_Weights/"
     checkpoint_path = os.path.join(trainedWeightDir, f"Trained_model_{model_name}_{loss_name}")
     os.makedirs(plot_save_dir, exist_ok = True)
     os.makedirs(trainedWeightDir, exist_ok = True)
