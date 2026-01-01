@@ -86,13 +86,13 @@ python codes/evaluate.py
 | Flag / Mode | Description |
 |------------|-------------|
 | **(default)** | Runs **preprocessing → prediction → evaluation** using **UNet**, **user-trained weights**, model_name = `Trained_model_UNet_CombinedLoss`, threshold = `0.6` |
-| `--pretrained 0` | Use **user-trained weights** from `Output/Trained_Weights/` |
-| `--pretrained 1` | Use **pretrained UNet** weights from paper `Output/Pretrained_Weights/`|
-| `--pretrained 2` | Use **pretrained UNetDeep** weights from paper `Output/Pretrained_Weights/` |
+| `--pretrained 0` | Use **user-trained weights** from `output/Trained_Weights/` |
+| `--pretrained 1` | Use **pretrained UNet** weights from paper `output/Pretrained_Weights/`|
+| `--pretrained 2` | Use **pretrained UNetDeep** weights from paper `output/Pretrained_Weights/` |
 | `--threshold <value>` | Set prediction & evaluation threshold (default = `0.6`) |
 | `--model_name` | Run **only preprocessing** |
 
-For evaluaton on **user-trained weights**, correct `--model_name` should be provided from the `Output/Trained_Weights/`
+For evaluaton on **user-trained weights**, correct `--model_name` should be provided from the `output/Trained_Weights/`
 
 The above mentioned code performs the following steps:
 1. Preprocessing  `Data/Prediction/Processed_MRCs`
