@@ -39,7 +39,6 @@ MERGED_MITO_DIR = os.path.join(BASE_PRED_DIR, "PredictionMerged_mitochondria")
 def pred_out_dir(threshold):
     return os.path.join(BASE_PRED_DIR, f"PredictedLabels/Predicted_labels_Th{threshold}_Images")
 
-
 def preprocessing():
     
     print("\n----- Preprocessing Test Data -----\n")
@@ -112,12 +111,9 @@ def prediction(pretrained = 1, Model_name = 'Trained_model_UNet_CombinedLoss', T
     model = model.to(device)
     test_data = SliceLoader_MRC(BASE_PRED_DIR, 'slices') 
     test_loader = DataLoader(test_data , batch_size = 1 , shuffle = False)
-    
     os.makedirs(TEMP_NUC_DIR , exist_ok= True)
     os.makedirs(TEMP_MITO_DIR , exist_ok= True)
     
-    # model.eval()
-    # with torch.no_grad():
     for i,img in enumerate(test_loader):
         img = img.to(device)
         prediction = model(img)
