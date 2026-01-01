@@ -64,7 +64,9 @@ python codes/train.py --loss_tag 1
 - `--model_tag 1 --loss_tag 1` → trains **UNetDeep** with **BCEWithLogitsLoss**
 - `--epochs X` → trains for X number of epochs (default: 60)
 
-Training execution will create logs and save trained model weights in the `output/Trained_Weights` folder. Early stopping has been intentially removed, so stop the training based on val and train error/accuracy.
+Training execution will save logs, progress file and trained model weights in the `output/Trained_Weights` folder. It also save final training loss and val loss plot in `output/Plots` folder.
+
+Note: Early stopping has been intentially removed, so stop the training based on val and train error/accuracy.
 
 ## Prediction and Evaluation
 
