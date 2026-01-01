@@ -34,7 +34,7 @@ To prepare the data for training, copy raw mrc files in `Data/Traning/MRCs` and 
 - Each dimension of the image should be less than 704.
 
 #### Preprocessing: 
-Here all the raw mrcs and masks are split in train and validation folders inside `Data/Training folder` (i.e. new folder are created `mrc_train`, `mrc_val`, `mask_train` and `mask_val`). Each mrc and mask undergoes padding, to ensure the image size matches the model's input requirement. Each raw mrc undergoes preprocessing as proposed in MitoXRNet paper. Further it creates 3D slices for train and validation dataset in folder `Data/Training/slices`.
+Here all the raw mrcs and masks are split in train and validation folders inside `Data/Training folder` (i.e. new folder are created `mrc_train_preprocessed`, `mrc_val_preprocessed`, `mask_train_preprocessed` and `mask_val_preprocessed`). Each mrc and mask undergoes padding, to ensure the image size matches the model's input requirement. Each raw mrc undergoes preprocessing as proposed in MitoXRNet paper. Further it creates 3D slices for train and validation dataset in folder `Data/Training/slices`.
 
 Run preprocessing with default 80/20 train–validation split
 ```
