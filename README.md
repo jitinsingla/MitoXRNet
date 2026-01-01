@@ -54,9 +54,9 @@ Train using UNetDeep (Deeper network: ~22M parameters)
 ```
 python codes/train.py --model_tag 1
 ```
-Train using CombinedLoss: Robust Dice+BCE Loss
+Train using BCEWithLogitsLoss
 ```
-python codes/train.py --loss_tag 0
+python codes/train.py --loss_tag 1
 ```
 - default command trains **UNet** with **CombinedLoss**
 - `--model_tag 1` → trains **UNetDeep (larger network)**
