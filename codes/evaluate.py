@@ -36,9 +36,14 @@ TEMP_MITO_DIR  = os.path.join(TEMP_SLICE_DIR, "mito_temp")
 MERGED_NUC_DIR  = os.path.join(BASE_PRED_DIR, "NucleusProbabilisticPrediction")
 MERGED_MITO_DIR = os.path.join(BASE_PRED_DIR, "MitoProbabilisticPrediction")
 
+EVAL_DIR = "./output/Evaluation_results"
+
 def pred_out_dir(threshold):
     return os.path.join(BASE_PRED_DIR, f"PredictedLabels/Threshold_{threshold}")
 
+def eval_out_file(threshold):
+    return os.path.join(EVAL_DIR, f"evaluation_metrics_threshold_{threshold}.json")
+    
 def preprocessing():
     
     print("\n----- Preprocessing Test Data -----\n")
@@ -322,8 +327,8 @@ def metrics_eval(threshold=0.6):
 
     console.print(table)
     # ---- Save JSON ----
-    out_json = f"../output/Evaluation_results/Metrics_threshold_{threshold}_results.json"
-    os.makedirs('../output/Evaluation_results/', exist_ok = True)
+    os.makedirs(EVAL_DIR, exist_ok = True)
+    out_json = eval_out_file(threshold)
     
     with open(out_json, "w") as f:
         json.dump({
