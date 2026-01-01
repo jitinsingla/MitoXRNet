@@ -20,24 +20,24 @@ import argparse
 # Use absolute paths if these paths not working
 # =========================
 
-BASE_DATA_DIR = "../Data"
+BASE_DATA_DIR = "./Data"
 BASE_PRED_DIR = os.path.join(BASE_DATA_DIR, "Prediction")
 
 LABEL_DIR = os.path.join(BASE_PRED_DIR, "Labels")
 MRC_DIR = os.path.join(BASE_PRED_DIR, "MRCs")
 
-PROCESSED_DIR = os.path.join(BASE_PRED_DIR, "MRCs_preprocessed")
-SLICE_DIR = os.path.join(BASE_PRED_DIR, "slices")
+PROCESSED_DIR = os.path.join(BASE_PRED_DIR, "Preprocessed")
+SLICE_DIR = os.path.join(BASE_PRED_DIR, "Slices")
 
 TEMP_SLICE_DIR = os.path.join(BASE_PRED_DIR, "prediction_slices_temp")
-TEMP_NUC_DIR   = os.path.join(TEMP_SLICE_DIR, "Nucleus_Prediction")
-TEMP_MITO_DIR  = os.path.join(TEMP_SLICE_DIR, "Mitochondria_Prediction")
+TEMP_NUC_DIR   = os.path.join(TEMP_SLICE_DIR, "nuc_temp")
+TEMP_MITO_DIR  = os.path.join(TEMP_SLICE_DIR, "mito_temp")
 
-MERGED_NUC_DIR  = os.path.join(BASE_PRED_DIR, "PredictionMerged_nucleus")
-MERGED_MITO_DIR = os.path.join(BASE_PRED_DIR, "PredictionMerged_mitochondria")
+MERGED_NUC_DIR  = os.path.join(BASE_PRED_DIR, "NucleusProbabilisticPrediction")
+MERGED_MITO_DIR = os.path.join(BASE_PRED_DIR, "MitoProbabilisticPrediction")
 
 def pred_out_dir(threshold):
-    return os.path.join(BASE_PRED_DIR, f"PredictedLabels/Predicted_labels_Th{threshold}_Images")
+    return os.path.join(BASE_PRED_DIR, f"PredictedLabels/Threshold_{threshold}")
 
 def preprocessing():
     
