@@ -12,7 +12,7 @@ def preprocessing(split_ratio = 0.8):
     print()
     mrc_folder = '../Data/Training/MRCs'
     mask_folder = '../Data/Training/Labels'
-    output_folder = "../Data/Training/"
+    output_folder = "../Data/Training/Preprocessed"
     split_dataset(mrc_folder, mask_folder, output_folder,split_ratio = split_ratio)
     print()
     folders = {
@@ -67,7 +67,7 @@ def preprocessing(split_ratio = 0.8):
     print()
     for i in folders:    
         path_to_subfolder = os.path.join('../Data/Training' , i)
-        output_folder = os.path.join('../Data/Slices/' , i.split("_preprocessed")[0]+'_Slices')
+        output_folder = os.path.join('../Data/Training/Slices/' , i.split("_preprocessed")[0]+'_slices')
         os.makedirs(output_folder,exist_ok=True)
         for filename in os.listdir(path_to_subfolder):
             if filename.endswith('.mrc'):  
@@ -77,7 +77,7 @@ def preprocessing(split_ratio = 0.8):
 
                 img_name, _ = os.path.splitext(filename)
 
-                create_and_save_slices(image, img_name,output_folder)
+                create_and_save_slices(image, img_name, output_folder)
                 del img_name, image, image_path
                 gc.collect()
     print()                             
