@@ -1,0 +1,8 @@
+{
+    "status": "placeholder",
+    "epoch": null,
+    "loss": null,
+    "dice_nucleus": null,
+    "dice_mito": null,
+    "note": "Temporary file, will be overwritten during training"
+}
