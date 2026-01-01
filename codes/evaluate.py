@@ -4,7 +4,7 @@ import torch
 import os
 import glob, gc
 import torch.nn as nn
-from MitoXRNet import UNet, UNetDeep
+from mitoXRNet import UNet, UNetDeep
 import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
 from utils import *
