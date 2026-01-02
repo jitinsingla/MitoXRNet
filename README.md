@@ -96,7 +96,7 @@ python codes/evaluate.py
 | `--only_predict` | Only **Preprocessing** and **Prediction** |
 | `--threshold <value>` | Set prediction & evaluation threshold (default = `0.6`) |
 
-Copy the above model inside `output/Pretrained_Weights/` folder.
+For using the pretrained weigths copy the models inside `output/Pretrained_Weights/` folder.
 For evaluaton on **user-trained weights**, correct `--model_name` should be provided from the `output/Trained_Weights/`
 
 The above mentioned code performs the following steps:
