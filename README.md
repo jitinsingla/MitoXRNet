@@ -92,7 +92,7 @@ python codes/evaluate.py
 | `--pretrained 0` | Use **user-trained weights** from `output/Trained_Weights/` |
 | `--model_name` | Used to select one of the user trained models from `output/Trained_Weights/` |
 | `--pretrained 1` | Use **pretrained UNet with Combined loss** weights from paper `output/Pretrained_Weights/`|
-| `--pretrained 2` | Use **pretrained UNetDeep with Combined loss** weights from paper, model is here [UNetDeep_CombinedLoss](https://drive.google.com/drive/folders/1ERnxFkRweSzqcIoNNmrSTytvAv3uJzrG) |
+| `--pretrained 2` | Use **pretrained UNetDeep with Combined loss** weights from paper, [MitoXRNet_models](https://drive.google.com/drive/folders/1ERnxFkRweSzqcIoNNmrSTytvAv3uJzrG) |
 | `--only_predict` | Only **Preprocessing** and **Prediction** |
 | `--threshold <value>` | Set prediction & evaluation threshold (default = `0.6`) |
 
