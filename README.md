@@ -95,6 +95,7 @@ python codes/evaluate.py
 | `--pretrained 2` | Use **pretrained UNetDeep with Combined loss** weights from paper, model is here [UNetDeep_CombinedLoss](https://drive.google.com/drive/folders/1ERnxFkRweSzqcIoNNmrSTytvAv3uJzrG) |
 | `--only_predict` | Only **Preprocessing** and **Prediction** |
 | `--threshold <value>` | Set prediction & evaluation threshold (default = `0.6`) |
+
 Copy the above model inside `output/Pretrained_Weights/` folder.
 For evaluaton on **user-trained weights**, correct `--model_name` should be provided from the `output/Trained_Weights/`
 
