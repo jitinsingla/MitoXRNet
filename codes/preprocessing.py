@@ -66,7 +66,7 @@ def preprocessing(split_ratio = 0.8):
     print('---------Slicing Started---------', flush=True)
     print()
     for i in folders:    
-        path_to_subfolder = os.path.join('./Data/Training' , i)
+        path_to_subfolder = os.path.join('./Data/Training/Preprocessed' , i)
         output_folder = os.path.join('./Data/Training/Slices/' , i.split("_preprocessed")[0]+'_slices')
         os.makedirs(output_folder,exist_ok=True)
         for filename in os.listdir(path_to_subfolder):
