@@ -9,7 +9,7 @@ conda env create -f env/environment.yml
 conda activate sxt_seg
 ```
 if using env file gives error, just ensure all the following packages are installed:
-gc, cupy, pytorch, numpy, pandas, tenorflow, shutil, matplotlib.
+gc, patchify, tqdm, glob, pytorch, numpy, pandas, tenorflow, shutil, matplotlib.
 
 ## MitoXRNet Usage
 User can train the model from scratch or use the pretrained weights from the paper to directly predict on their dataset.
