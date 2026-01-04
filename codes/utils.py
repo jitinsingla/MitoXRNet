@@ -1,5 +1,4 @@
 import numpy as np
-import cupy as cp
 import os, shutil, random, skimage, glob
 from patchify import patchify, unpatchify
 from scipy import ndimage
