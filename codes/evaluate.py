@@ -51,7 +51,22 @@ def Initialization(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f'\n--> Device found = {device}, using it for Prediction/Evaluation')
     print()
-    if pretrained == 1:
+    if pretrained ==0:
+        Trained_weights_path = Path(f'./output/Trained_Weights/{Model_name}')
+        if not Trained_weights_path.is_file():
+            raise FileNotFoundError(f"Checkpoint not found at: {Trained_weights_path}")
+
+        checkpoint = torch.load(Trained_weights_path)
+        if "UNetDeep" in Model_name:
+            model = UNetDeep(input_shape = (1,64,704,704), num_classes=2)
+            print(f'\n---> Model = **{Model_name}** Model, Base model: UNetDeep\n')
+        elif "UNet_" in Model_name:
+            model = UNet(input_shape = (1,64,704,704), num_classes=2)
+            print(f'\n---> Model = **{Model_name}** Model, Base model: UNet\n')
+        else:
+            raise ValueError("Model name is not correct. Please provide  correct --model_name: Trained_model_<model type>_<loss used>")
+            
+    elif pretrained == 1:
         if PRETRAINED_UNET.is_file():
             print(f'\n---> Model = Pretrained Shallow UNet Model\n')
             checkpoint = torch.load(PRETRAINED_UNET)
@@ -66,21 +81,6 @@ def Initialization(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss
             model = UNetDeep(input_shape = (1,64,704,704), num_classes=2)
         else:
             raise FileNotFoundError(f" Model not found at: {PRETRAINED_UNETDeep}")
-            
-    elif pretrained ==0:
-        Trained_weights_path = Path(f'./output/Trained_Weights/{Model_name}')
-        if not Trained_weights_path.is_file():
-            raise FileNotFoundError(f"Checkpoint not found at: {Trained_weights_path}")
-
-        checkpoint = torch.load(Trained_weights_path)
-        if "UNetDeep" in Model_name:
-            model = UNetDeep(input_shape = (1,64,704,704), num_classes=2)
-            print(f'\n---> Model = **{Model_name}** Model, Base model: UNetDeep\n')
-        elif "UNet_" in Model_name:
-            model = UNet(input_shape = (1,64,704,704), num_classes=2)
-            print(f'\n---> Model = **{Model_name}** Model, Base model: UNet\n')
-        else:
-            raise ValueError("Model name is not correct. Please provide  correct --model_name: Trained_model_<model type>_<loss used>")
     return device, model, checkpoint
             
 def preprocessing():
