@@ -240,8 +240,8 @@ def train(loss_fn, optimizer, model, train_loader, val_loader, device, model_nam
         print(f'Epoch: {epoch + 1:02} | Epoch Time: {epoch_mins}m {epoch_secs}s')
         print(f'\tTrain Loss: {train_loss:.3f}')
         print(f'\t Val. Loss: {valid_loss:.3f}')
-        print(f'\t Nucelus DiceScore: {round(NucDice*100,2)}')
-        print(f'\t Mito DiceScore: {round(MitoDice*100,2)}')
+        print(f'\t Nucelus DiceScore: {NucDice:.3f}')
+        print(f'\t Mito DiceScore: {MitoDice:.3f}')
         torch.cuda.empty_cache()
         del train_loss,valid_loss,NucDice,MitoDice
     print()
