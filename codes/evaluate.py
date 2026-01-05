@@ -218,6 +218,7 @@ def prediction(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss', T
             print(f"Saved: {out_path}")
             del addImage, counterImage, counterSlice
             gc.collect()
+        print('\n')
         
     if os.path.exists(TEMP_SLICE_DIR):
         shutil.rmtree(TEMP_SLICE_DIR)
