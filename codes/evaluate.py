@@ -127,10 +127,10 @@ def preprocessing():
     print()                             
     print('--------- Slicing Completed ---------\n')
     
-def prediction(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss', Threshold = 0.6, device = 'cpu', model = None, checkpoint = None):
+def prediction(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss', Threshold = 0.6, device = 'cpu', model_used = None, checkpoint_used = None):
     
-    model = nn.DataParallel(model)
-    model.load_state_dict(checkpoint['model_state_dict'])
+    model = nn.DataParallel(model_used)
+    model.load_state_dict(checkpoint_used['model_state_dict'])
     model = model.to(device)
     test_data = SliceLoader_MRC(BASE_PRED_DIR, 'slices') 
     test_loader = DataLoader(test_data , batch_size = 1 , shuffle = False)
@@ -414,21 +414,25 @@ def main():
     if args.only_predict:
         print("\n---------- Starting Only Prediction ----------\n")
         prediction(
-            device, model, checkpoint,
             pretrained=args.pretrained,
             Model_name=args.model_name,
-            Threshold=args.threshold
+            Threshold=args.threshold,
+            device = device,
+            model_used = model,
+            checkpoint_used = checkpoint
         )
         print("\n---------- Prediction Completed ----------\n")
         return
     
     print("\n---------- Starting Prediction ----------\n")
     prediction(
-        device, model, checkpoint,
-        pretrained=args.pretrained,
-        Model_name=args.model_name,
-        Threshold=args.threshold
-    )
+            pretrained=args.pretrained,
+            Model_name=args.model_name,
+            Threshold=args.threshold,
+            device = device,
+            model_used = model,
+            checkpoint_used = checkpoint
+        )
     print("\n-------------- Calculating Metrics Score on Predicted Cells --------------\n")
     metrics_eval(threshold=args.threshold)
     print("\n---------- Pipeline Completed ----------\n")
