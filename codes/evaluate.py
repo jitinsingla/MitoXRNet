@@ -396,7 +396,8 @@ def main():
     try:
         args = parser.parse_args()
     except SystemExit:
-        print("Invalid arguments. Use --help to see allowed options.")
+        print("\nInvalid arguments. Use --help to see allowed options.")
+        print()
         sys.exit(1)
     print()
     try:
