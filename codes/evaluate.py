@@ -394,7 +394,13 @@ def main():
     )
     args = parser.parse_args()
     print()
-    device, model, checkpoint = Initialization(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss')
+    try:
+        device, model, checkpoint = Initialization(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss')
+
+    except (FileNotFoundError, ValueError) as e:
+        print(f"{e}")
+        sys.exit(1)
+        
     preprocessing()
     print()
     print("\n---------- Preprocessing Completed ----------")
