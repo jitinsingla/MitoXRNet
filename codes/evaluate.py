@@ -8,7 +8,6 @@ from mitoXRNet import UNet, UNetDeep
 import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
 from utils import *
-import cupy as cp
 import json
 from rich.table import Table
 from rich.console import Console
@@ -238,7 +237,7 @@ def prediction(pretrained = 1, Model_name = 'Trained_model_UNet_CombinedLoss', T
         img = read_mrc(i)
         mask = read_mrc(j)
         cropped_img = anti_padding(img,mask.shape)
-        write_mrc(os.path.join(Outputpath, os.path.basename(i)),cropped_img.astype(cp.float32))
+        write_mrc(os.path.join(Outputpath, os.path.basename(i)),cropped_img.astype(np.float32))
     if os.path.exists(MERGED_NUC_DIR) and os.path.exists(MERGED_MITO_DIR):
         shutil.rmtree(MERGED_MITO_DIR)
         shutil.rmtree(MERGED_NUC_DIR)        
