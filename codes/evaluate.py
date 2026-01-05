@@ -1,4 +1,5 @@
 from slice_loader import SliceLoader, SliceLoader_MRC
+from pathlib import Path
 import numpy as np
 import torch
 import os
@@ -35,8 +36,8 @@ TEMP_MITO_DIR  = os.path.join(TEMP_SLICE_DIR, "mito_temp")
 MERGED_NUC_DIR  = os.path.join(BASE_PRED_DIR, "NucleusProbabilisticPrediction")
 MERGED_MITO_DIR = os.path.join(BASE_PRED_DIR, "MitoProbabilisticPrediction")
 
-PRETRAINED_UNET = "./output/Pretrained_Weights/UNet_CombinedLoss"
-PRETRAINED_UNETDeep = "./output/Pretrained_Weights/UNetDeep_CombinedLoss"
+PRETRAINED_UNET = Path("./output/Pretrained_Weights/UNet_CombinedLoss")
+PRETRAINED_UNETDeep = Path("./output/Pretrained_Weights/UNetDeep_CombinedLoss")
 EVAL_DIR = "./output/Evaluation_results"
 
 def pred_out_dir(threshold):
@@ -67,7 +68,7 @@ def Initialization(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss
             raise FileNotFoundError(f" Model not found at: {PRETRAINED_UNETDeep}")
             
     elif pretrained ==0:
-        Trained_weights_path = os.path.join('./output/Trained_Weights', Model_name)
+        Trained_weights_path = Path(f'./output/Trained_Weights/{Model_name}')
         if not Trained_weights_path.is_file():
             raise FileNotFoundError(f"Checkpoint not found at: {Trained_weights_path}")
 
@@ -126,7 +127,7 @@ def preprocessing():
     print()                             
     print('--------- Slicing Completed ---------\n')
     
-def prediction(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss', Threshold = 0.6, device = 'cpu', model = model, checkpoint = checkpoint):
+def prediction(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss', Threshold = 0.6, device = 'cpu', model = None, checkpoint = None):
     
     model = nn.DataParallel(model)
     model.load_state_dict(checkpoint['model_state_dict'])
