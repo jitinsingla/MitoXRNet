@@ -35,6 +35,8 @@ TEMP_MITO_DIR  = os.path.join(TEMP_SLICE_DIR, "mito_temp")
 MERGED_NUC_DIR  = os.path.join(BASE_PRED_DIR, "NucleusProbabilisticPrediction")
 MERGED_MITO_DIR = os.path.join(BASE_PRED_DIR, "MitoProbabilisticPrediction")
 
+PRETRAINED_UNET = "./output/Pretrained_Weights/UNet_CombinedLoss"
+PRETRAINED_UNETDeep = "./output/Pretrained_Weights/UNetDeep_CombinedLoss"
 EVAL_DIR = "./output/Evaluation_results"
 
 def pred_out_dir(threshold):
@@ -43,6 +45,43 @@ def pred_out_dir(threshold):
 def eval_out_file(threshold):
     return os.path.join(EVAL_DIR, f"evaluation_metrics_threshold_{threshold}.json")
     
+def Initialization(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss'):
+    
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f'\n--> Device found = {device}, using it for Prediction/Evaluation')
+    print()
+    if pretrained == 1:
+        if PRETRAINED_UNET.is_file():
+            print(f'\n---> Model = Pretrained Shallow UNet Model\n')
+            checkpoint = torch.load(PRETRAINED_UNET)
+            model = UNet(input_shape = (1,64,704,704), num_classes=2)
+        else:
+            raise FileNotFoundError(f" Model not found at: {PRETRAINED_UNET}")
+            
+    elif pretrained == 2:
+        if PRETRAINED_UNETDeep.is_file():
+            print(f'\n---> Model =  Pretrained UNetDeep Model\n')
+            checkpoint = torch.load(PRETRAINED_UNETDeep)
+            model = UNetDeep(input_shape = (1,64,704,704), num_classes=2)
+        else:
+            raise FileNotFoundError(f" Model not found at: {PRETRAINED_UNETDeep}")
+            
+    elif pretrained ==0:
+        Trained_weights_path = os.path.join('./output/Trained_Weights', Model_name)
+        if not Trained_weights_path.is_file():
+            raise FileNotFoundError(f"Checkpoint not found at: {Trained_weights_path}")
+
+        checkpoint = torch.load(Trained_weights_path)
+        if "UNetDeep" in Model_name:
+            model = UNetDeep(input_shape = (1,64,704,704), num_classes=2)
+            print(f'\n---> Model = **{Model_name}** Model, Base model: UNetDeep\n')
+        elif "UNet_" in Model_name:
+            model = UNet(input_shape = (1,64,704,704), num_classes=2)
+            print(f'\n---> Model = **{Model_name}** Model, Base model: UNet\n')
+        else:
+            raise ValueError("Model name is not correct. Please provide  correct --model_name: Trained_model_<model type>_<loss used>")
+    return device, model, checkpoint
+            
 def preprocessing():
     
     print("\n----- Preprocessing Test Data -----\n")
@@ -87,28 +126,7 @@ def preprocessing():
     print()                             
     print('--------- Slicing Completed ---------\n')
     
-def prediction(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss', Threshold = 0.6):
-    
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f'\n--> {device} founded, using it for Testing')
-    if pretrained == 1:
-        print(f'\n---> Loading Pretrained Shallow UNet Model\n')
-        checkpoint = torch.load('../output/Pretrained_Weights/UNet_CombinedLoss')
-        model = UNet(input_shape = (1,64,704,704), num_classes=2)
-    elif pretrained == 2:
-        print(f'\n---> Loading Pretrained UNetDeep Model\n')
-        checkpoint = torch.load('../output/Pretrained_Weights/UNetDeep_CombinedLoss')
-        model = UNetDeep(input_shape = (1,64,704,704), num_classes=2)
-    else:
-        checkpoint = torch.load(f'../output/Trained_Weights/{Model_name}')
-        if "UNetDeep" in Model_name:
-            model = UNetDeep(input_shape = (1,64,704,704), num_classes=2)
-            print(f'\n---> Loading Trained **{Model_name}** Model, Base model: UNetDeep\n')
-        elif "UNet_" in Model_name:
-            model = UNet(input_shape = (1,64,704,704), num_classes=2)
-            print(f'\n---> Loading Trained **{Model_name}** Model, Base model: UNet\n')
-        else:
-            raise ValueError("Model name is not correct. Please provide  correct --model_name: Trained_model_<model type>_<loss used>")
+def prediction(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss', Threshold = 0.6, device = 'cpu', model = model, checkpoint = checkpoint):
     
     model = nn.DataParallel(model)
     model.load_state_dict(checkpoint['model_state_dict'])
@@ -374,26 +392,29 @@ def main():
         help="If set, only run prediction without training"
     )
     args = parser.parse_args()
-    
+    print()
+    device, model, checkpoint = Initialization(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss')
     preprocessing()
     print()
     print("\n---------- Preprocessing Completed ----------")
+
     if args.only_predict:
         print("\n---------- Starting Only Prediction ----------\n")
         prediction(
             pretrained=args.pretrained,
             Model_name=args.model_name,
-            Threshold=args.threshold
+            Threshold=args.threshold,
+            device, model, checkpoint
         )
         print("\n---------- Prediction Completed ----------\n")
         return
-        
     
     print("\n---------- Starting Prediction ----------\n")
     prediction(
         pretrained=args.pretrained,
         Model_name=args.model_name,
-        Threshold=args.threshold
+        Threshold=args.threshold,
+        device, model, checkpoint
     )
     print("\n-------------- Calculating Metrics Score on Predicted Cells --------------\n")
     metrics_eval(threshold=args.threshold)
