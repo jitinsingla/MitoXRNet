@@ -374,12 +374,12 @@ def metrics_eval(threshold=0.6):
 def main():
     parser = argparse.ArgumentParser(description="MitoXRNet Full Pipeline")
     parser.add_argument(
-        "--pretrained", type=int, default=0,
-        help="0 = Trained Model, 1 = UNet, 2 = UNetDeep (default = 0)"
+        "--pretrained", type=int, default=0, choices=[0, 1, 2],
+        help="0 = Trained Model, 1 = UNet, 2 = UNetDeep, (default = 0)"
     )
     parser.add_argument(
         "--threshold", type=float, default=0.6,
-        help="Threshold for prediction and metrics (default = 0.6)"
+        help="Threshold for prediction and metrics, (default = 0.6)"
     )
     parser.add_argument(
         "--model_name",
@@ -392,7 +392,12 @@ def main():
         action="store_true",
         help="If set, only run prediction without training"
     )
+    
+    try:
     args = parser.parse_args()
+    except SystemExit:
+        print("Invalid arguments. Use --help to see allowed options.")
+        sys.exit(1)
     print()
     try:
         device, model, checkpoint = Initialization(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss')
