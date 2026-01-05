@@ -87,7 +87,7 @@ def preprocessing():
     print()                             
     print('--------- Slicing Completed ---------\n')
     
-def prediction(pretrained = 1, Model_name = 'Trained_model_UNet_CombinedLoss', Threshold = 0.6):
+def prediction(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss', Threshold = 0.6):
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f'\n--> {device} founded, using it for Testing')
@@ -355,8 +355,8 @@ def metrics_eval(threshold=0.6):
 def main():
     parser = argparse.ArgumentParser(description="MitoXRNet Full Pipeline")
     parser.add_argument(
-        "--pretrained", type=int, default=1,
-        help="0 = Trained Model, 1 = UNet, 2 = UNetDeep (default = 1)"
+        "--pretrained", type=int, default=0,
+        help="0 = Trained Model, 1 = UNet, 2 = UNetDeep (default = 0)"
     )
     parser.add_argument(
         "--threshold", type=float, default=0.6,
