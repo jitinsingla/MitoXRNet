@@ -177,7 +177,7 @@ def prediction(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss', T
             cells[parent_name][axis][patchNum] = os.path.abspath(
                 os.path.join(src_dir, filename)
             )
-        print(f"\nDetected {len(cells)} unique cells:")
+        print(f"Detected {len(cells)} unique cells:")
         for k in cells:
             print("  ", k)
         print()
