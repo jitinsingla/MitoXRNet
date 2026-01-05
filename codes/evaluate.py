@@ -402,20 +402,20 @@ def main():
     if args.only_predict:
         print("\n---------- Starting Only Prediction ----------\n")
         prediction(
+            device, model, checkpoint,
             pretrained=args.pretrained,
             Model_name=args.model_name,
-            Threshold=args.threshold,
-            device, model, checkpoint
+            Threshold=args.threshold
         )
         print("\n---------- Prediction Completed ----------\n")
         return
     
     print("\n---------- Starting Prediction ----------\n")
     prediction(
+        device, model, checkpoint,
         pretrained=args.pretrained,
         Model_name=args.model_name,
-        Threshold=args.threshold,
-        device, model, checkpoint
+        Threshold=args.threshold
     )
     print("\n-------------- Calculating Metrics Score on Predicted Cells --------------\n")
     metrics_eval(threshold=args.threshold)
