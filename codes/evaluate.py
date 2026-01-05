@@ -132,7 +132,7 @@ def prediction(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss', T
     model = nn.DataParallel(model_used)
     model.load_state_dict(checkpoint_used['model_state_dict'])
     model = model.to(device)
-    test_data = SliceLoader_MRC(BASE_PRED_DIR, 'slices') 
+    test_data = SliceLoader_MRC(BASE_PRED_DIR, 'Slices') 
     test_loader = DataLoader(test_data , batch_size = 1 , shuffle = False)
     os.makedirs(TEMP_NUC_DIR , exist_ok= True)
     os.makedirs(TEMP_MITO_DIR , exist_ok= True)
