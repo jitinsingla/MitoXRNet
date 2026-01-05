@@ -172,8 +172,8 @@ def Initialization(model_tag = 0, loss_tag=0, epochs = 60):
     model = nn.DataParallel(model)  
     model = model.to(device)
     # Load train and val datasets using SliceLoader
-    train_dataset = SliceLoader("./Data/Slices/", "mrc_train_Slices", "mask_train_Slices") 
-    val_dataset = SliceLoader("./Data/Slices/", "mask_val_Slices", "mask_val_Slices")
+    train_dataset = SliceLoader("./Data/Training/Slices/", "mrc_train_slices", "mask_train_slices") 
+    val_dataset = SliceLoader("./Data/Training/Slices/", "mask_val_slices", "mask_val_slices")
     # Define DataLoader for training and validating
     train_loader = DataLoader(train_dataset, batch_size=batchSize, shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=batchSize, shuffle=False)
