@@ -400,7 +400,7 @@ def main():
         sys.exit(1)
     print()
     try:
-        device, model, checkpoint = Initialization(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss')
+        device, model, checkpoint = Initialization(pretrained = args.pretrained, Model_name = args.model_name)
 
     except (FileNotFoundError, ValueError) as e:
         print(f"{e}")
