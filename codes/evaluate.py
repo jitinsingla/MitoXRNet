@@ -157,7 +157,6 @@ def prediction(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss', T
     for src_dir, dst_dir in zip(dirPath, mergeDirPath):
         os.makedirs(dst_dir, exist_ok=True)
         fileList = sorted(os.listdir(src_dir))
-        print(f'fileList: {len(fileList)}')
         cells = {}
         for filename in fileList:
             if not filename.endswith(".mrc"):
@@ -178,7 +177,7 @@ def prediction(pretrained = 0, Model_name = 'Trained_model_UNet_CombinedLoss', T
             cells[parent_name][axis][patchNum] = os.path.abspath(
                 os.path.join(src_dir, filename)
             )
-        print(f"Detected {len(cells)} unique cells:")
+        print(f"\nDetected {len(cells)} unique cells:")
         for k in cells:
             print("  ", k)
         print()
