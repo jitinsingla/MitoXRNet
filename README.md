@@ -1,5 +1,7 @@
 # MitoXRNet 
 
+Paper [Link](https://www.biorxiv.org/content/10.1101/2025.10.16.682919v2.abstract)
+
 ## Prerequisties / Environment Setup
 Install Anaconda for setup ([link](https://docs.anaconda.com/anaconda/install/))
 
