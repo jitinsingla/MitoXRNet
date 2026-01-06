@@ -1,6 +1,6 @@
 # MitoXRNet 
 
-Paper [Link](https://www.biorxiv.org/content/10.1101/2025.10.16.682919v2.abstract)
+This is the codebase used for the analysis in paper Yadav, A., Singh, A., Deshmukh, A., Bharadwaj, P., Baliyan, A., White, K., & Singla, J. (2025). [Robust Deep Learning-based 3D Segmentation and Morphological Analysis of Mitochondria using Soft X-ray Tomography.](https://www.biorxiv.org/content/10.1101/2025.10.16.682919v2.abstract) bioRxiv, 2025-10.
 
 ## Prerequisties / Environment Setup
 Install Anaconda for setup ([link](https://docs.anaconda.com/anaconda/install/))
